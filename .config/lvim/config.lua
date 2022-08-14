@@ -157,20 +157,20 @@ lvim.builtin.terminal.direction = "horizontal"
 lvim.builtin.terminal.shading_factor = -6
 lvim.builtin.terminal.open_mapping = "<C-j>"
 -- diable arrow keys in normal mode
-vim.cmd([[
-  	map <up> <nop>
-  	map <down> <nop>
-  	map <left> <nop>
-  	map <right> <nop>
-]])
+-- vim.cmd([[
+--   	map <up> <nop>
+--   	map <down> <nop>
+--   	map <left> <nop>
+--   	map <right> <nop>
+-- ]])
 
--- diable arrow keys in insert mode
-vim.cmd([[
-  	imap <up> <nop>
-	imap <down> <nop>
-	imap <left> <nop>
-	imap <right> <nop>
-]])
+-- -- diable arrow keys in insert mode
+-- vim.cmd([[
+--   	imap <up> <nop>
+-- 	imap <down> <nop>
+-- 	imap <left> <nop>
+-- 	imap <right> <nop>
+-- ]])
 
 vim.cmd([[
 set background=dark
