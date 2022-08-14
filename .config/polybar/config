@@ -36,20 +36,14 @@ height = 27
 ;offset-y = 1%
 radius = 1.0
 fixed-center = true
-
 background = ${colors.bg}
 foreground = ${colors.fg}
-
 line-size = 2
 line-color = ${colors.bg}
-
-
 border-size = 0
 border-color = #0D00564d
-
 padding-left = 1
 padding-right = 1
-
 module-margin-left = 1
 module-margin-right = 1
 
@@ -60,24 +54,19 @@ font-2 = JetbrainsMono Nerd Font Mono:style=Regular:pixelsize=13;2
 
 modules-left = icon hostname bspwm 
 modules-center = xwindow pacman-updates
-modules-right = bluetooth network date powermenu
+modules-right = network date powermenu
 
 separator = "|"
 tray-position = none
 tray-padding = 1
 ;tray-background = #0063ff
-
 ;wm-restack = bspwm
 ;wm-restack = i3
-
 ;override-redirect = true
-
 ;scroll-up = bspwm-desknext
 ;scroll-down = bspwm-deskprev
-
 ;scroll-up = i3wm-wsnext
 ;scroll-down = i3wm-wsprev
-
 cursor-click = pointer
 eursor-scroll = ns-resize
 
@@ -98,15 +87,15 @@ label = %title%
 label-maxlen = 50
 label-empty = " "
 
-[module/bluetooth]
-type = custom/script
-exec = ~/.config/polybar/scripts/bluetooth.sh
-interval = 1.0
-click-left = exec blueman
-click-right = exec ~/.config/polybar/scripts/toggle_bluetooth.sh
-format-background = ${color.background}
-format-foreground = #bdae93
-label = " %percentage%%"
+; [module/bluetooth]
+; type = custom/script
+; exec = ~/.config/polybar/scripts/bluetooth.sh
+; interval = 1.0
+; click-left = exec blueman
+; click-right = exec ~/.config/polybar/scripts/toggle_bluetooth.sh
+; format-background = ${color.background}
+; format-foreground = #bdae93
+; label = " %percentage%%"
 
 [module/bspwm]
 type = internal/bspwm
