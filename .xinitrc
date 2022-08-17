@@ -40,5 +40,6 @@ setxkbmap us &
 nitrogen --restore &
 xsetroot -cursor_name left_ptr &
 picom -f &
+sxhkd &
 exec bspwm
 
