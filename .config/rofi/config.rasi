@@ -146,4 +146,4 @@ max-history-size: 15;
   }
 }
 
-@theme "nord"
+@theme "custom"
