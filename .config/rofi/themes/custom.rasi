@@ -34,8 +34,8 @@ configuration {
   padding: 1;
   spacing: 1;
 
-  bg: #13161D;
-  bg-alt: #1A1D26;
+  bg: #1A191E;
+  bg-alt: #1E1D23;
   fg: #81A1C1;
   fg-alt: #EBCB8B;
 
