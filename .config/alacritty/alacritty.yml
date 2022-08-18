@@ -279,28 +279,51 @@ font:
   #selection:
   #  text: CellBackground
   #  background: CellForeground
+# colors:
+#   primary:
+#     background: '#191B20'
+#     foreground: '#DFE0EA'
+#   normal:
+#     black:   '#272932'
+#     red:     '#E85A84'
+#     green:   '#94DD8E'
+#     yellow:  '#E9D26C'
+#     blue:    '#7EB7E6'
+#     magenta: '#ECABE8'
+#     cyan:    '#7EB7E6'
+#     white:   '#CFD0D7'
+#   bright:
+#     black:   '#16181D'
+#     red:     '#E85A84'
+#     green:   '#94DD8E'
+#     yellow:  '#E9D26C'
+#     blue:    '#7EB7E6'
+#     magenta: '#ECABE8'
+#     cyan:    '#89BEB7'
+#     white:   '#DFE0EA'
 colors:
   primary:
-    background: '#191B20'
-    foreground: '#DFE0EA'
+    background: '#1E1D23'
+    foreground: '#DED7D0'
   normal:
     black:   '#272932'
-    red:     '#E85A84'
-    green:   '#94DD8E'
-    yellow:  '#E9D26C'
-    blue:    '#7EB7E6'
-    magenta: '#ECABE8'
-    cyan:    '#7EB7E6'
-    white:   '#CFD0D7'
+    red:     '#FF7DA3'
+    green:   '#7EC49D'
+    yellow:  '#EFD472'
+    blue:    '#8BB8D0'
+    magenta: '#BDA9D4'
+    cyan:    '#8BB8D0'
+    white:   '#DED7D0'
   bright:
-    black:   '#16181D'
-    red:     '#E85A84'
-    green:   '#94DD8E'
-    yellow:  '#E9D26C'
-    blue:    '#7EB7E6'
-    magenta: '#ECABE8'
-    cyan:    '#89BEB7'
-    white:   '#DFE0EA'
+    black:   '#272932'
+    red:     '#FF7DA3'
+    green:   '#7EC49D'
+    yellow:  '#EFD472'
+    blue:    '#8BB8D0'
+    magenta: '#BDA9D4'
+    cyan:    '#8BB8D0'
+    white:   '#DED7D0'
+
 
   # Normal colors
   #normal:
