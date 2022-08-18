@@ -13,7 +13,7 @@ lvim.log.level = "warn"
 lvim.format_on_save = true
 -- lvim.colorscheme = "onenord"
 
-lvim.colorscheme = "minimal"
+lvim.colorscheme = "minimal-pro-pro"
 -- lvim.colorscheme = "gruvbox-material"
 --lvim.colorscheme = "everforest"
 -- lvim.colorscheme = "catppuccin"
@@ -126,11 +126,35 @@ lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = true
 lvim.builtin.lualine.active = true
 lvim.builtin.lualine.style = "default"
+-- vim.g.minimal_italic_functions = true
+-- vim.g.minimal_italic_keywords = true
+-- vim.g.minimal_italic_comments = true
+
+-- +-------------------------------------------------+
+-- | A | B | C                             X | Y | Z |
+-- +-------------------------------------------------+
+-- insert -> insert mode, normal -> normal mode, visual -> visual mode
+local custom_16 = require 'lualine.themes.base16'
+-- Change the background of lualine_c section for normal mode
+custom_16.normal.c.bg = '#1A191E'
+custom_16.normal.b.bg = '#1A191E'
+--custom_16.normal.a.bg = '#8BB8D0'
+custom_16.normal.c.fg = '#695F69'
+custom_16.normal.b.fg = '#695F69'
+custom_16.insert.b.fg = '#695F69'
+custom_16.insert.b.bg = '#1A191E'
+custom_16.visual.b.bg = '#1A191E'
+custom_16.insert.b.fg = '#695F69'
+custom_16.visual.b.fg = '#695F69'
+custom_16.insert.a.bg = '#A896BE'
+
 lvim.builtin.lualine.options = {
     icons_enabled = true,
-    theme = 'onedark',
+    -- theme = 'onedark',
     -- theme = "nord"
+    theme = custom_16
 }
+
 
 
 
@@ -305,6 +329,7 @@ lvim.plugins = {
 
     -- themes
     {
+
         "yazeed1s/minimal.nvim",
         "sainnhe/gruvbox-material",
         'sainnhe/everforest',
@@ -416,12 +441,12 @@ lvim.plugins = {
         cmd = "SymbolsOutline",
     },
 
-    -- {
-    --   "Pocco81/AutoSave.nvim",
-    --   config = function()
-    --     require("autosave").setup()
-    --   end,
-    -- },
+    {
+        "Pocco81/AutoSave.nvim",
+        config = function()
+            require("autosave").setup()
+        end,
+    },
 
     {
         "felipec/vim-sanegx",
