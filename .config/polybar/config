@@ -17,13 +17,13 @@
 ;==========================================================
 
 [colors]
-bg = #13161D
+bg = #1A191E
 fg = #DFE0EEA
-gray = #87898D
+gray = #706270
 red = #E85A84
 green = #94DD8E
 yellow = #E9D26C
-blue = #7EB7E6
+blue = #8BB8D0
 magenta = #ECABE8
 cyan = #8ec07c
 orange = #fe8019
@@ -75,10 +75,10 @@ type = custom/script
 exec = checkupdates | wc -l
 interval = 1000
 label = Updates: %output%
-format-foreground = ${colors.magenta}
+format-foreground = ${colors.blue}
 format-background = ${colors.bg}
 format-prefix = " "
-format-prefix-foreground = ${colors.magenta}
+format-prefix-foreground = ${colors.blue}
 
 [module/xwindow]
 type = internal/xwindow
