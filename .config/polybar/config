@@ -52,7 +52,7 @@ font-0 = JetbrainsMono Nerd Font Mono:style=Regular:pixelsize=12;1
 font-1 = JetbrainsMono Nerd Font Mono:style=Regular:pixelsize=12;1
 font-2 = JetbrainsMono Nerd Font Mono:style=Regular:pixelsize=12;1
 
-modules-left = icon hostname bspwm 
+modules-left = icon bspwm 
 modules-center = xwindow pacman-updates
 modules-right = network date powermenu
 
