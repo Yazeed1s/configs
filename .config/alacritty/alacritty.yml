@@ -164,7 +164,7 @@ font:
   # of as modifying the line spacing, and `offset.x` as modifying the letter
   # spacing.
   offset:
-   x: 2
+   x: 1
    y: 9
 
   # Glyph offset determines the locations of the glyphs within their cells with
@@ -323,7 +323,28 @@ colors:
     magenta: '#BDA9D4'
     cyan:    '#8BB8D0'
     white:   '#DED7D0'
-
+# colors:
+#   primary:
+#     background: '#1E1D23'
+#     foreground: '#DED7D0'
+#   normal:
+#     black:   '#272932'
+#     red:     '#FF7DA3'
+#     green:   '#7EC49D'
+#     yellow:  '#736C74'
+#     blue:    '#8BB8D0'
+#     magenta: '#BDA9D4'
+#     cyan:    '#BDA9D4'
+#     white:   '#DED7D0'
+#   bright:
+#     black:   '#272932'
+#     red:     '#FF7DA3'
+#     green:   '#7EC49D'
+#     yellow:  '#EFD472'
+#     blue:    '#8BB8D0'
+#     magenta: '#BDA9D4'
+#     cyan:    '#8BB8D0'
+#     white:   '#DED7D0'
 
   # Normal colors
   #normal:
