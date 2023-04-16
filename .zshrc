@@ -5,15 +5,15 @@
 export ZSH="$HOME/.oh-my-zsh"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
+export PATH="$HOME/.emacs.d/doom/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export EDITOR=lvim
+export EDITOR=nvim
 export VISUAL="$EDITOR"
+export QT_QPA_PLATFORMTHEME=qt5ct
+export INSTALL4J_JAVA_HOME="/usr/lib/jvm/java-19-openjdk:$PATH"
 neofetch
 
-alias nvim="lvim"
 alias clr="clear"
-alias rng="ranger"
-alias get="paru"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -112,4 +112,7 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-eval $(thefuck --alias)
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)

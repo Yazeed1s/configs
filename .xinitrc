@@ -42,4 +42,5 @@ xsetroot -cursor_name left_ptr &
 picom -f &
 sxhkd &
 exec bspwm
+export _JAVA_AWT_WM_NONREPARENTING=1
 
