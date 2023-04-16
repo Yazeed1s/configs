@@ -1,11 +1,19 @@
+/**
+ *
+ * Author : Aditya Shakya (adi1090x)
+ * Github : @adi1090x
+ * 
+ * Rofi Theme File
+ * Rofi Version: 1.7.3
+ **/
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                       "drun,run,filebrowser,window";
-    show-icons:                 true;
-    display-drun:               "";
+	modi:                       "drun,run";
+    show-icons:                 false;
+    display-drun:               "";
     display-run:                "";
-    display-filebrowser:        "";
+    display-filebrowser:        "";
     display-window:             "";
 	drun-display-format:        "{name}";
 	window-format:              "{w} · {c} · {t}";
@@ -17,7 +25,7 @@ configuration {
 
 * {
     border-colour:               var(selected);
-    handle-colour:               var(selected);
+    handle-colour:               var(foreground);
     background-colour:           var(background);
     foreground-colour:           var(foreground);
     alternate-background:        var(background-alt);
@@ -45,19 +53,21 @@ configuration {
 window {
     /* properties for window widget */
     transparency:                "real";
-    location:                    center;
-    anchor:                      center;
+    location:                    north;
+    anchor:                      north;
     fullscreen:                  false;
-    width:                       1100px;
+    width:                       100%;
     x-offset:                    0px;
     y-offset:                    0px;
+
+    children:                    [ horibox ];
 
     /* properties for all widgets */
     enabled:                     true;
     margin:                      0px;
     padding:                     0px;
     border:                      0px solid;
-    border-radius:               10px;
+    border-radius:               0px;
     border-color:                @border-colour;
     cursor:                      "default";
     /* Backgroud Colors */
@@ -72,54 +82,65 @@ window {
     //background-image:          linear-gradient(45, cyan, purple, indigo);
 }
 
+/*****----- Horizontal Box -----*****/
+horibox {
+    spacing:                     0px;
+    background-color:            @background-colour;
+    text-color:                  @foreground-colour;
+    orientation:                 horizontal;
+    children:                    [ "prompt", "textbox-prompt-colon","entry", "listview" ];
+}
+
 /*****----- Main Box -----*****/
 mainbox {
     enabled:                     true;
-    spacing:                     8px;
+    spacing:                     10px;
     margin:                      0px;
-    padding:                     8px;
+    padding:                     10px;
     border:                      0px solid;
     border-radius:               0px 0px 0px 0px;
     border-color:                @border-colour;
     background-color:            transparent;
-    children:                    [ "inputbar", "message", "listview" ];
+    children:                    [ "inputbar", "message", "listview", "mode-switcher" ];
 }
 
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     5px;
     margin:                      0px;
-    padding:                     5px;
+    padding:                     8px;
     border:                      0px solid;
-    border-radius:               0px;
+    border-radius:               4px;
     border-color:                @border-colour;
-    background-color:            transparent;
+    background-color:            @alternate-background;
     text-color:                  @foreground-colour;
-    children:                    [ "textbox-prompt-colon", "entry", "mode-switcher" ];
+    children:                    [ "prompt", "entry" ];
 }
 
 prompt {
     enabled:                     true;
+    padding:                     10px;
     background-color:            inherit;
     text-color:                  inherit;
 }
 textbox-prompt-colon {
     enabled:                     true;
-    padding:                     15px 10px;
+    padding:                     10px 0px 10px 0px;
     expand:                      false;
-    str:                         " ::";
+    str:                         " ::";
     background-color:            inherit;
     text-color:                  inherit;
 }
 entry {
     enabled:                     true;
-    padding:                     15px 10px;
-    background-color:            @alternate-background;
+    padding:                     10px;
+    expand:                      false;
+    width:                       10em;
+    background-color:            inherit;
     text-color:                  inherit;
     cursor:                      text;
-    border-radius:               10px;
-    placeholder:                 "Search...";
+    placeholder:                 "search...";
     placeholder-color:           inherit;
 }
 num-filtered-rows {
@@ -151,18 +172,18 @@ case-indicator {
 listview {
     enabled:                     true;
     columns:                     1;
-    lines:                       8;
+    lines:                       100;
     cycle:                       true;
     dynamic:                     true;
-    scrollbar:                   true;
-    layout:                      vertical;
+    scrollbar:                   false;
+    layout:                      horizontal;
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;
     
-    spacing:                     5px;
-    margin:                      2px;
-    padding:                     5px;
+    spacing:                     10px;
+    margin:                      0px;
+    padding:                     0px;
     border:                      0px solid;
     border-radius:               0px;
     border-color:                @border-colour;
@@ -173,18 +194,18 @@ listview {
 scrollbar {
     handle-width:                5px ;
     handle-color:                @handle-colour;
-    border-radius:               10px;
+    border-radius:               8px;
     background-color:            @alternate-background;
 }
 
 /*****----- Elements -----*****/
 element {
     enabled:                     true;
-    spacing:                     10px;
-    margin:                      2px;
-    padding:                     10px 10px;
+    spacing:                     8px;
+    margin:                      0px;
+    padding:                     10px 8px;
     border:                      0px solid;
-    border-radius:               10px;
+    border-radius:               0px;
     border-color:                @border-colour;
     background-color:            transparent;
     text-color:                  @foreground-colour;
@@ -205,17 +226,14 @@ element normal.active {
 element selected.normal {
     background-color:            var(alternate-normal-background);
     text-color:                  var(border-colour);
-
 }
 element selected.urgent {
     background-color:            var(alternate-normal-background);
     text-color:                  var(border-colour);
-
 }
 element selected.active {
     background-color:            var(alternate-normal-background);
     text-color:                  var(border-colour);
-
 }
 element alternate.normal {
     background-color:            var(alternate-normal-background);
@@ -251,23 +269,23 @@ mode-switcher{
     margin:                      0px;
     padding:                     0px;
     border:                      0px solid;
-    border-radius:               0px;
+    border-radius:               4px;
     border-color:                @border-colour;
-    background-color:            transparent;
+    background-color:            @alternate-background;
     text-color:                  @foreground-colour;
 }
 button {
-    padding:                     15px 19px;
+    padding:                     8px;
     border:                      0px solid;
-    border-radius:               10px;
+    border-radius:               4px;
     border-color:                @border-colour;
-    background-color:            @alternate-background;
+    background-color:            transparent;
     text-color:                  inherit;
     cursor:                      pointer;
 }
 button selected {
-    background-color:            var(alternate-background);
-    text-color:                  var(border-colour);
+    background-color:            var(normal-foreground);
+    text-color:                  var(normal-background);
 }
 
 /*****----- Message -----*****/
@@ -282,9 +300,9 @@ message {
     text-color:                  @foreground-colour;
 }
 textbox {
-    padding:                     8px 10px;
+    padding:                     8px;
     border:                      0px solid;
-    border-radius:               10px;
+    border-radius:               0px;
     border-color:                @border-colour;
     background-color:            @alternate-background;
     text-color:                  @foreground-colour;
@@ -296,9 +314,9 @@ textbox {
     markup:                      true;
 }
 error-message {
-    padding:                     10px;
-    border:                      2px solid;
-    border-radius:               10px;
+    padding:                     0px;
+    border:                      0px solid;
+    border-radius:               0px;
     border-color:                @border-colour;
     background-color:            @background-colour;
     text-color:                  @foreground-colour;
