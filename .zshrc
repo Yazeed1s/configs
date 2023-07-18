@@ -3,18 +3,23 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+export PATH="$HOME/scripts:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
-export PATH="$HOME/.emacs.d/doom/bin:$PATH"
+export PATH="$HOME/.config/emacs/bin:$PATH"
+export QT_QPA_PLATFORMTHEME=qt5ct
+export INSTALL4J_JAVA_HOME="/usr/lib/jvm/java-19-openjdk:$PATH"xport PATH="$HOME/.emacs.d/doom/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export EDITOR=nvim
 export VISUAL="$EDITOR"
 export QT_QPA_PLATFORMTHEME=qt5ct
 export INSTALL4J_JAVA_HOME="/usr/lib/jvm/java-19-openjdk:$PATH"
 neofetch
-
+# bsp-layout set even
 alias clr="clear"
-
+alias fzv="fzv.sh"
+alias fdf="find_.sh"
+alias fz="fzf --print0 | xargs -0 -o nvim"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
