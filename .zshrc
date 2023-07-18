@@ -8,7 +8,8 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 export PATH="$HOME/.config/emacs/bin:$PATH"
 export QT_QPA_PLATFORMTHEME=qt5ct
-export INSTALL4J_JAVA_HOME="/usr/lib/jvm/java-19-openjdk:$PATH"xport PATH="$HOME/.emacs.d/doom/bin:$PATH"
+export INSTALL4J_JAVA_HOME="/usr/lib/jvm/java-19-openjdk:$PATH"
+export PATH="$HOME/.emacs.d/doom/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export EDITOR=nvim
 export VISUAL="$EDITOR"
