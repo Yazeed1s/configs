@@ -12,10 +12,14 @@ super + l
 
 # program launcher
 super + @space
-	rofi -show run
+    sh .config/rofi/launch_topbar.sh
 	#dmenu_run
 super + p
-    sh .config/rofi/launch.sh
+    rofi -show drun
+
+super + j
+    sh .config/rofi/launch_window_switcher.sh
+	#dmenu_run
 
 # make sxhkd reload its configuration files:
 super + Escape
@@ -45,6 +49,9 @@ super + y
 super + g
 	bspc node -s biggest.window
 
+# launch web
+super + k
+	/usr/bin/firefox
 #
 # state/flags
 #

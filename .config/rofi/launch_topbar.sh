@@ -5,5 +5,5 @@ theme='bar'
 
 ## Run
 rofi \
-    -show run \
+    -show drun \
     -theme ${dir}/${theme}.rasi
