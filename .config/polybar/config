@@ -25,10 +25,10 @@ orange = #fe8019
 ;monitor = ${env:MONITOR:HDMI-1}
 enable-ipc = true
 width = 100%
-height = 25
+height = 27
 ;bottom = true
 ;offset-x = 1%
-;offset-y = 1%
+;offset-y = 10%
 ; radius = 1.0
 fixed-center = true
 background = ${colors.bg}
@@ -43,30 +43,67 @@ padding-left = 0
 padding-right = 0
 module-margin-left = 1
 module-margin-right = 1
-font-0 = JetbrainsMono Nerd Font :style=Regular:size=11;
-font-1 = JetbrainsMono Nerd Font :style=Regular:size=11;
-font-2 = JetbrainsMono Nerd Font :style=Regular:size=11;
+font-0 = JetbrainsMono Nerd Font :style=Regular:size=11.5;
+font-1 = JetbrainsMono Nerd Font :style=Regular:size=11.5;
+font-2 = JetbrainsMono Nerd Font :style=Regular:size=11.5;
 modules-left = icon bspwm xwindow
 ; modules-center = icon-s spotify prev play-pause next s a pacman-updates
 ; modules-center = icon-s spotify prev play-pause next
-modules-right = memory disk pulseaudio-output network pacman-updates date
+modules-right = memory pulseaudio-output network battery brightness pacman-updates date
 separator = ""
 tray-position = none
 tray-padding = 0
 cursor-click = pointer
 eursor-scroll = ns-resize
 
+[module/battery]
+type = internal/battery
+full-at = 99
+low-at = 20
+battery = BAT0
+adapter = ADP1
+poll-interval = 5
+format-charging-foreground = ${colors.foreground}
+format-discharging-foreground = ${colors.foreground}
+format-charging = <animation-charging><label-charging>
+format-discharging = <ramp-capacity><label-discharging>
+label-charging = %percentage%%
+label-discharging =%percentage%%
+label-full = Full
+label-low = LOW 
+ramp-capacity-0 = "  "
+ramp-capacity-1 = "  "
+ramp-capacity-2 = "  "
+ramp-capacity-3 = "  "
+ramp-capacity-4 = "  "
+bar-capacity-width = 10
+animation-charging-0 = "  "
+animation-charging-1 = "  "
+animation-charging-2 = "  "
+animation-charging-3 = "  "
+animation-charging-4 = "  "
+animation-charging-framerate = 750
+animation-discharging-0 = "  "
+animation-discharging-1 = "  "
+animation-discharging-2 = "  "
+animation-discharging-3 = "  "
+animation-discharging-4 = "  "
+animation-discharging-framerate = 500
+animation-low-0 = !
+animation-low-1 = 
+animation-low-framerate = 200
+
 [module/pulseaudio-output]
 type = custom/script
 tail = true
 format-underline = ${colors.cyan}
-label-padding = 3
+label-padding = 1
 label-foreground = ${colors.foreground}
 # Icons mixed from Font Awesome 5 and Material Icons
 # You can copy-paste your options for each possible action, which is more
 # trouble-free but repetitive, or apply only the relevant ones (for example
 # --node-blacklist is only needed for next-node).
-exec = pulseaudio-control --icons-volume "  ,  " --icon-muted "  "  listen
+exec = pulseaudio-control --icons-volume "  ,  " --icon-muted "  " --node-nickname "n" listen
 click-right = exec pavucontrol &
 click-left = pulseaudio-control togmute
 click-middle = pulseaudio-control --node-blacklist "alsa_output.pci-0000_01_00.1.hdmi-stereo-extra2" next-node
@@ -86,6 +123,15 @@ scroll-down = pulseaudio-control --volume-max 130 down
 ;click-middle = pulseaudio-control --node-type input next-node
 ;scroll-up = pulseaudio-control --node-type input --volume-max 130 up
 ;scroll-down = pulseaudio-control --node-type input --volume-max 130 down
+
+[module/brightness]
+type = custom/script
+exec = ~/.config/polybar/scripts/brightnessctl.sh
+scroll-up = exec brightnessctl set +5%
+scroll-down = exec brightnessctl set 5%-
+interval = 0.5
+label = %output%
+label-foreground = ${colors.foreground}
 
 [module/pacman-updates]
 type = custom/script
@@ -125,14 +171,14 @@ type = custom/script
 exec = ~/.config/polybar/scripts/memory
 format-foreground     = ${colors.gray}
 interval = 1
-click-left = kitty -e btop
+click-left = alacritty -e btop
 
 [module/disk]
 type = custom/script
 exec = ~/.config/polybar/scripts/diskusage
 format-foreground     = ${colors.gray}
 interval = 5
-click-left = kitty -e ncdu
+click-left = alacritty -e ncdu
 
 [module/prev]
 type = custom/script
@@ -184,7 +230,6 @@ time = "%I:%M %p  "
 time-alt = "%A, %m/%d/%y  "
 label = %time%
 
-
 [module/icon]
 type = custom/script
 exec = echo "   "
@@ -192,7 +237,7 @@ exec = echo "   "
 
 [module/network]
 type = internal/network
-interface = wlan0
+interface = wlp1s0
 interval = 1.0
 accumulate-stats = true
 ; unknown-as-up = true
@@ -204,7 +249,8 @@ format-disconnected-prefix = 睊
 format-disconnected-background = ${color.background}
 format-disconnected-foreground = #928374
 ;label-connected = "%{A2:network.sh &:}直%{A}"
-label-connected = %{F#ea6962} %{F-} %essid%
+;label-connected = %{F#ea6962} %{F-} %essid%
+label-connected = %{F#ea6962} %{F-} 
 label-disconnected = "睊"
 ramp-signal-0 = 直
 ramp-signal-1 = 直

@@ -7,13 +7,11 @@ super + Return
 	alacritty
 
 super + l
-	kitty
-
+    sh .config/rofi/launch_topbar.sh
 
 # program launcher
 super + @space
-    sh .config/rofi/launch_topbar.sh
-	#dmenu_run
+	dmenu_run
 super + p
     rofi -show drun
 
