@@ -43,13 +43,13 @@ padding-left = 0
 padding-right = 0
 module-margin-left = 1
 module-margin-right = 1
-font-0 = JetbrainsMono Nerd Font :style=Regular:size=11.5;
-font-1 = JetbrainsMono Nerd Font :style=Regular:size=11.5;
-font-2 = JetbrainsMono Nerd Font :style=Regular:size=11.5;
+font-0 = JetbrainsMono Nerd Font :style=Regular:size=11;
+font-1 = JetbrainsMono Nerd Font :style=Regular:size=11;
+font-2 = JetbrainsMono Nerd Font :style=Regular:size=11;
 modules-left = icon bspwm xwindow
 ; modules-center = icon-s spotify prev play-pause next s a pacman-updates
 ; modules-center = icon-s spotify prev play-pause next
-modules-right = memory pulseaudio-output network battery brightness pacman-updates date
+modules-right = memory pulseaudio battery brightness pacman-updates network date
 separator = ""
 tray-position = none
 tray-padding = 0
@@ -92,6 +92,26 @@ animation-discharging-framerate = 500
 animation-low-0 = !
 animation-low-1 = 
 animation-low-framerate = 200
+
+[module/pulseaudio]
+type = internal/pulseaudio
+use-ui-max = false
+
+format-volume = <label-volume>
+format-volume-padding = 0
+format-volume-prefix = %{T9}%{T-}
+format-volume-prefix-foreground = ${colors.foreground}
+label-volume = %{T2}%percentage%%%{T-}
+label-volume-foreground = ${colors.foreground}
+label-volume-padding = 1
+format-muted = <label-muted>
+format-muted-padding = 0
+format-muted-prefix = %{T9}%{T-}
+format-muted-prefix-foreground = ${colors.gray}
+label-muted = %{T2}%percentage%%%{T-}
+label-muted-foreground = ${colors.gray}
+label-muted-padding = 1
+click-right = pavucontrol&
 
 [module/pulseaudio-output]
 type = custom/script
