@@ -63,6 +63,10 @@
 # lvm2: Logical Volume Management tools
 # rsync: Remote file synchronization tool
 # tmux: Terminal multiplexer
+# fzf: cli fuzzy finder
+# ufw: firewall rules manger
+# mariadb/mysql: MariaDB is the default implementation of MySQL in Arch Linux
+# postgresql: postgresql db
 
 pacman_packages=(
 	picom polybar sxhkd bspwm 
@@ -77,7 +81,7 @@ pacman_packages=(
 	pacman-contrib git mesa
 	base-devel networkmanager wpa_supplicant
 	wireless_tools netctl dialog lvm2
-	rsync tmux
+	rsync tmux fzf mariadb postgresql
 )
 
 # Install packages with pacman
@@ -107,6 +111,34 @@ else
     exit 1
 fi
 
+# Start MySQL (MariaDB)
+echo -e "Starting MariaDB...\n"
+if mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql && sudo systemctl enable mariadb.service; then
+    echo -e "MariaDB started successfully.\n"
+    sleep 3
+else
+    echo -e "Error: Failed to start MariaDB. Exiting script.\n"
+    exit 1
+fi
+
+# Start PostgreSQL
+echo -e "Starting PostgreSQL...\n"
+# switch to the postgres user and initialize the data directory
+if sudo -iu postgres && initdb -D /var/lib/postgres/data && exit; then
+    echo -e "PostgreSQL initialized successfully.\n"
+    sleep 3
+else
+    echo -e "Error: Failed to initialize PostgreSQL. Exiting script.\n"
+    exit 1
+fi
+
+# enable the PostgreSQL service
+if sudo systemctl enable postgresql; then
+    echo -e "PostgreSQL service enabled successfully.\n"
+else
+    echo -e "Error: Failed to enable PostgreSQL service. Exiting script.\n"
+    exit 1
+fi
 
 echo -e "Looking for yay...\n"
 sleep 2
@@ -174,7 +206,7 @@ if ! cp -r $HOME/gruvbox-material-gtk/themes/* $HOME/.themes; then
 fi
 
 # copy icon files to ~/.icons
-if ! cp -r $HOME/gruvbox-material-gtk/icons/* $HOME/.icons; then
+if ! cp -r $HOME/gruvbox-material-gtk/icons/* $HOME/configs/.icons; then
     echo "Error: Failed to copy icon files. Exiting."
     exit 1
 fi

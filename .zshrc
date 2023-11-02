@@ -15,21 +15,102 @@ export QT_QPA_PLATFORMTHEME=qt5ct
 export INSTALL4J_JAVA_HOME="/usr/lib/jvm/java-19-openjdk:$PATH"
 export MY_INSTALL_DIR=$HOME/.local
 # export PATH="$MY_INSTALL_DIR/bin:$PATH"
-neofetch
-# bsp-layout set even
+if ! fastfetch; then
+	echo "where is your fetch?"
+fi
 
+# some random shit
+_fzf() {
+	fzf --multi \
+		--height=100% \
+		--margin=1%,0%,0%,1% \
+		--layout=reverse-list \
+		--border=none \
+		--info=inline \
+		--prompt='>>' \
+		--pointer='→' \
+		--marker='::' \
+		--color='dark,fg+:green,prompt:blue,pointer:red,info:magenta,hl:blue,hl+:blue' \
+		--preview 'bat --style=header --theme=base16 --color=always --line-range :500 {}'
+}
+
+lazy_find() {
+	while getopts "t:n:d:" opt; do
+		case $opt in
+		t)
+			target_type="$OPTARG"
+			;;
+		n)
+			file_name="$OPTARG"
+			;;
+		d)
+			directory="$OPTARG"
+			;;
+		\?)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+		esac
+	done
+
+	if [ -z "$target_type" ] || [ -z "$file_name" ] || [ -z "$directory" ]; then
+		echo "Usage: $0 -t [f|d] -n [name] -d [directory]"
+		return
+	fi
+
+	if [ "$target_type" != "f" ] && [ "$target_type" != "d" ]; then
+		echo "Invalid target type: $target_type. Use 'f' for files or 'd' for directories."
+		return
+	fi
+
+	if [ "$target_type" = "f" ]; then
+		selected_files=$(find "$directory" -type f -name "$file_name")
+	else
+		selected_files=$(find "$directory" -type d -name "$file_name")
+	fi
+
+	if [ -n "$selected_files" ]; then
+		echo "Files/Dirs found:"
+		echo "$selected_files"
+	else
+		echo "No $target_type with the name '$file_name' found in the directory '$directory'."
+		return
+	fi
+}
+
+_none() {
+	file=$(fzf)
+	[ -n "$file" ] && nvim "$file"
+}
+
+_grep_files() {
+	if [ -n "$1" ] && [ -n "$2" ]; then
+		grep -rl "$1" "$2"
+	else
+		echo "Usage: grepf <text> <directory>"
+	fi
+}
+
+# bsp-layout set even
+alias sctl='systemctl'
 alias clr='clear'
-alias fzv='fzv.sh'
-alias fdf='find_.sh'
-alias fz='fzf --print0 | xargs -0 -o nvim'
+alias fzv=_none
+alias fdf=lazy_find
+alias fzf=_fzf
+alias grepf=_grep_files
+alias fz='\fzf --preview "bat --style=header --theme=base16 --color=always --line-range :500 {}" --print0 | xargs -0 -o nvim'
 alias grep='grep -n --color'
 alias zn='nvim ~/.zshrc'
 alias zs='source ~/.zshrc'
 alias hg='history | grep'
 alias h='history'
 alias co='codium .'
+alias cp='cp -i'
+alias rm='rm -i'
+alias mv='mv -i'
 alias findf='find . -type f'
 alias findd='find . -type d'
+alias pacman="sudo pacman"
 #git
 alias gitc='git clone'
 alias gs='git status'
@@ -40,9 +121,9 @@ alias gc='git commit -m'
 alias gpo='git push origin'
 #pacman & yay
 alias yup='yay -Syu'
-alias pup='sudo pacman -Syu'
-alias pcup='sudo pacman -R $(pacman -Qtdq)' # one day this is gonna break my system
-alias pc='sudo pacman -Sc'
+alias pup='pacman -Syu'
+alias pcup='pacman -R $(pacman -Qtdq)' # one day this is gonna break my system
+alias pc='pacman -Sc'
 #disk & memory info
 alias mem='free -h'
 alias disk='df -h'
@@ -70,5 +151,4 @@ ZSH_THEME="amuse"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-
-source <(ng completion script)
+# source <(ng completion script)
