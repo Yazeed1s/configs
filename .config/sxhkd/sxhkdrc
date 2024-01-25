@@ -50,6 +50,9 @@ super + g
 # launch web
 super + k
 	/usr/bin/firefox
+
+super + n
+	sh scripts/dmenu_g_search.sh
 #
 # state/flags
 #

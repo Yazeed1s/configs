@@ -1,6 +1,6 @@
 
 [colors]
-bg = #1b1b1b
+bg = #161616
 fg = #d4be98
 gray = #665c54
 red = #ea6962
@@ -43,9 +43,9 @@ padding-left = 0
 padding-right = 0
 module-margin-left = 1
 module-margin-right = 1
-font-0 = JetbrainsMono Nerd Font :style=Regular:size=11;
-font-1 = JetbrainsMono Nerd Font :style=Regular:size=11;
-font-2 = JetbrainsMono Nerd Font :style=Regular:size=11;
+font-0 = JetbrainsMono NF :style=Regular:size=11;
+font-1 = JetbrainsMono NF :style=Regular:size=11;
+font-2 = JetbrainsMono NF :style=Regular:size=11;
 modules-left = icon bspwm xwindow
 ; modules-center = icon-s spotify prev play-pause next s a pacman-updates
 ; modules-center = icon-s spotify prev play-pause next
@@ -175,7 +175,7 @@ exec = echo ""
 format-foreground = ${colors.green}
 ; format = <label>
 
-[module/s]
+[module/s] 
 type = custom/script
 exec = echo "|"
 format-foreground = ${colors.fg}
@@ -257,7 +257,7 @@ exec = echo "   "
 
 [module/network]
 type = internal/network
-interface = wlp1s0
+interface = wlan0
 interval = 1.0
 accumulate-stats = true
 ; unknown-as-up = true
@@ -270,8 +270,8 @@ format-disconnected-background = ${color.background}
 format-disconnected-foreground = #928374
 ;label-connected = "%{A2:network.sh &:}直%{A}"
 ;label-connected = %{F#ea6962} %{F-} %essid%
-label-connected = %{F#ea6962} %{F-} 
-label-disconnected = "睊"
+label-connected = "%{F#ea6962} %{F-}" 
+label-disconnected = "!"
 ramp-signal-0 = 直
 ramp-signal-1 = 直
 ramp-signal-2 = 直
