@@ -7,8 +7,8 @@ static const char *fonts[]               = {"JetBrains Mono-11"};
 static const char *prompt                = NULL; /* -p  option; prompt to the left of input field */
 static const char *colors[SchemeLast][2] = {
     /*     fg         bg       */
-    [SchemeNorm] = {"#d4be98", "#1b1b1b"},
-    [SchemeSel]  = {"#665c54", "#1b1b1b"},
+    [SchemeNorm] = {"#d4be98", "#161616"},
+    [SchemeSel]  = {"#665c54", "#161616"},
     [SchemeOut]  = {"#000000", "#00ffff"},
 };
 /* -l option; if nonzero, dmenu uses vertical list with given number of lines */
