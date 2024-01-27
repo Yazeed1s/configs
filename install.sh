@@ -67,11 +67,14 @@
 # ufw: firewall rules manger
 # mariadb/mysql: MariaDB is the default implementation of MySQL in Arch Linux
 # postgresql: postgresql db
+# fastfetch: neofetch for sys-info
+
+INSTALLERDIR=$(dirname "$0")
 
 pacman_packages=(
-	picom polybar sxhkd bspwm 
+	fastfetch picom polybar sxhkd bspwm 
 	rofi dmenu btop nemo alacritty 
-    firefox neovim vim nitrogen 
+    	firefox neovim vim nitrogen 
 	brightnessctl gvfs bluez bluez-utils 
 	lxappearance go rust cmake 
 	clang grpc protobuf pavucontrol 
@@ -81,7 +84,7 @@ pacman_packages=(
 	pacman-contrib git mesa
 	base-devel networkmanager wpa_supplicant
 	wireless_tools netctl dialog lvm2
-	rsync tmux fzf mariadb postgresql
+	rsync tmux fzf
 )
 
 # Install packages with pacman
@@ -92,13 +95,16 @@ if ! sudo pacman -S "${pacman_packages[@]}"; then
 fi
 
 # start the SSH server
-echo -e "Starting SSH server...\n"
-if sudo systemctl enable --now sshd; then
-    echo -e "SSH server started successfully.\n"
-    sleep 3
-else
-    echo -e "Error: Failed to start the SSH server. Exiting script.\n"
-    exit 1
+read -n1 -rep 'would you like to start SSH server? (y,n)' HYP
+if [[ $HYP == "Y" || $HYP == "y" ]]; then
+	echo -e "Starting SSH server...\n"
+	if sudo systemctl enable --now sshd; then
+    		echo -e "SSH server started successfully.\n"
+    		sleep 3
+	else
+    		echo -e "Error: Failed to start the SSH server. Exiting script.\n"
+    		exit 1
+	fi
 fi
 
 # start NetworkManager
@@ -112,32 +118,45 @@ else
 fi
 
 # Start MySQL (MariaDB)
-echo -e "Starting MariaDB...\n"
-if mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql && sudo systemctl enable mariadb.service; then
-    echo -e "MariaDB started successfully.\n"
-    sleep 3
-else
-    echo -e "Error: Failed to start MariaDB. Exiting script.\n"
-    exit 1
+read -n1 -rep 'setup a MySQL (MariaDB) (y,n)' HYP
+if [[ $HYP == 'Y' || $HYP == 'y' ]]; then	
+	echo -e "Starting MariaDB...\n"	
+	if sudo pacman -S "mariadb"; then
+		if mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql && sudo systemctl enable mariadb.service; then
+    			echo -e "MariaDB started successfully.\n"
+    			sleep 3
+		else
+    			echo -e "Error: Failed to start MariaDB. Exiting script.\n"
+    			exit 1
+		fi
+	else
+		echo -e "Error: Failed to install MariaDB. Exiting...\n"
+		exit 1
+	fi
 fi
 
-# Start PostgreSQL
-echo -e "Starting PostgreSQL...\n"
-# switch to the postgres user and initialize the data directory
-if sudo -iu postgres && initdb -D /var/lib/postgres/data && exit; then
-    echo -e "PostgreSQL initialized successfully.\n"
-    sleep 3
-else
-    echo -e "Error: Failed to initialize PostgreSQL. Exiting script.\n"
-    exit 1
-fi
+# Start PostgreSQL 
+read -n1 -rep 'setup a PostgreSQL (y,n)' HYP
+if [[ $HYP == 'Y' || $HYP == 'y' ]]; then
+	echo -e "Starting PostgreSQL...\n"
+	if sudo pacman -S "postgresql"; then
+		# switch to the postgres user and initialize the data directory
+		if sudo -iu postgres && initdb -D /var/lib/postgres/data && exit; then
+    			echo -e "PostgreSQL initialized successfully.\n"
+    			sleep 3
+			# enable the PostgreSQL service
+			if sudo systemctl enable postgresql; then
+    				echo -e "PostgreSQL service enabled successfully.\n"
+			else
+    				echo -e "Error: Failed to enable PostgreSQL service. Exiting script.\n"
+    			exit 1
 
-# enable the PostgreSQL service
-if sudo systemctl enable postgresql; then
-    echo -e "PostgreSQL service enabled successfully.\n"
-else
-    echo -e "Error: Failed to enable PostgreSQL service. Exiting script.\n"
-    exit 1
+			fi
+		else
+    			echo -e "Error: Failed to initialize PostgreSQL. Exiting script.\n"
+    			exit 1
+		fi
+	fi
 fi
 
 echo -e "Looking for yay...\n"
@@ -169,13 +188,13 @@ fi
 # copy config files
 echo -e "Copying config files...\n"
 config_dirs=(
-	"$HOME/configs/.config/rofi" 
-	"$HOME/configs/.config/alacritty" 
-	"$HOME/configs/.config/polybar" 
-	"$HOME/configs/.config/bspwm" 
-	"$HOME/configs/.config/sxhkd" 
-	"$HOME/configs/.config/picom" 
-	"$HOME/configs/.config/btop"
+	"$INSTALLERDIR/.config/rofi"
+	"$INSTALLERDIR/.config/alacritty" 
+	"$INSTALLERDIR/.config/polybar" 
+	"$INSTALLERDIR/.config/bspwm" 
+	"$INSTALLERDIR/.config/sxhkd" 
+	"$INSTALLERDIR/.config/picom" 
+	"$INSTALLERDIR/.config/btop"
 )
 for dir in "${config_dirs[@]}"; do
     if ! cp -R "$dir" $HOME/.config/; then
@@ -206,7 +225,7 @@ if ! cp -r $HOME/gruvbox-material-gtk/themes/* $HOME/.themes; then
 fi
 
 # copy icon files to ~/.icons
-if ! cp -r $HOME/gruvbox-material-gtk/icons/* $HOME/configs/.icons; then
+if ! cp -r $HOME/gruvbox-material-gtk/icons/* $HOME/.icons; then
     echo "Error: Failed to copy icon files. Exiting."
     exit 1
 fi
@@ -220,13 +239,16 @@ if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/maste
 fi
 
 # copy the specified dot files
-dot_files=("$HOME/configs/.zshrc" "$HOME/configs/.xinitrc" "$HOME/configs/.tmux.conf")
+dot_files=("$INSTALLERDIR/.zshrc" "$INSTALLERDIR/.xinitrc" "$INSTALLERDIR/.tmux.conf")
 echo -e "Copying other dot files...\n"
 for file in "${dot_files[@]}"; do
-    if ! cp "./$file" ~; then
-        echo "Error: Failed to copy $file. Exiting."
+    if ! cp "$file" $HOME; then
+        echo -e "Error: Failed to copy $file. Exiting."
         exit 1
     fi
+	if ! chmod +x $HOME/.xinitrc; then
+        echo -e "Error: failed to make $HOME/.xinitrc executable.\n"
+	fi
 done
 
 
