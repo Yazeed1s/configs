@@ -1,36 +1,93 @@
 ;;; init.el starts here
 
-(setq ring-bell-function 'ignore)
+
+;;----------------------------------------------------
+;; general configs
+;;----------------------------------------------------
+(abbrev-mode -1)
 (global-set-key [escape] 'keyboard-escape-quit)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 (delete-selection-mode 1)    
 (electric-pair-mode 1)         
 (global-display-line-numbers-mode 1) 
-(global-visual-line-mode t) 
+(global-visual-line-mode -1)
 (menu-bar-mode -1)           
 (scroll-bar-mode -1)         
 (tool-bar-mode -1)
-(setq org-edit-src-content-indentation 0)
-(setq use-file-dialog nil)  
-(setq use-dialog-box nil)  
-(setq pop-up-windows nil) 
 (add-to-list 'default-frame-alist '(alpha-background . 95)) 
 (global-eldoc-mode -1)
-(pixel-scroll-precision-mode t)
-(setq display-line-numbers-type 'relative)
-
-(setq-default indent-tabs-mode t)
-(setq-default line-spacing 0.17)
-(setq confirm-kill-emacs nil)
-;; (setq display-line-numbers-type :relative)
+(eldoc-mode -1)
 (set-face-italic-p 'italic nil)
-(setq c-tab-always-indent t)
-
-;; ~~
+(pixel-scroll-precision-mode t)
+(visual-line-mode -1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-language-environment 'utf-8)
+(prefer-coding-system 'utf-8)
+;; vim tilde '~'
 (define-fringe-bitmap 'tilde [0 0 0 113 219 142 0 0] nil nil 'center)
 (setcdr (assq 'empty-line fringe-indicator-alist) 'tilde)
 (set-fringe-bitmap-face 'tilde 'font-lock-comment-face)
-(setq-default indicate-empty-lines t)
+(set-face-attribute 'default nil :family "JetBrainsMono NF" :height 130 :weight 'regular)
+;; (set-frame-font "JetBrainsMono NF 13" nil t)
+;; (add-to-list 'default-frame-alist '(font . "JetBrainsMono NF 13"))
+(set-face-attribute 'mode-line nil
+                    :background "#212121"
+		            :family "JetBrainsMono NF"
+		            :height 130
+                    :box '(:line-width 4 :color "#212121")
+                    :overline nil
+                    :underline nil)
+
+(set-face-attribute 'mode-line-inactive nil
+                    :background "#212121"
+		            :family "JetBrainsMono NF"
+		            :height 130
+                    :box '(:line-width 4 :color "#212121")
+                    :overline nil
+                    :underline nil)
+
+(set-face-attribute 'minibuffer-prompt nil
+                    :background "#212121"
+		            :family "JetBrainsMono NF"
+		            :height 130
+                    :box '(:line-width 4 :color "#212121")
+                    :overline nil
+                    :underline nil)
+
+
+(setq ring-bell-function 'ignore
+      org-edit-src-content-indentation 0
+      use-file-dialog nil  
+      use-dialog-box nil  
+      pop-up-windows nil 
+      eldoc-echo-area-use-multiline-p nil
+      eldoc-documentation-strategy 'eldoc-documentation-compose
+      eglot-ignored-server-capabilities '(:documentHighlightProvider)
+      eglot-ignored-server-capabilities '(:inlayHintProvider)
+      eglot-ignored-server-capabilities '(:hoverProvider)
+      eldoc-echo-area-prefer-doc-buffer t
+      display-line-numbers-type 'relative
+      confirm-kill-emacs nil
+      backup-inhibited t
+      create-lockfiles nil
+      locale-coding-system 'utf-8
+      c-tab-always-indent t)
+
+(setq-default indent-tabs-mode t
+	      line-spacing 0.17
+	      abbrev-mode -1
+	      indicate-empty-lines t
+	      tab-width 4
+	      standard-indent 4)
+
+;;(setq display-line-numbers-type :relative)
+;;(keymap-global-set "c-<right>" 'next-buffer)
+;;(keymap-global-set "c-<left>" 'previous-buffer)
+;;(setq eglot-managed-mode-hook (list (lambda () (eldoc-mode -1))))
 
 ;; (defun indent-relative (&optional arg)
 ;; 	"Newline and indent 4 spaces relative to previous line.  With
@@ -42,10 +99,11 @@
 ;; 								(current-column)))))
 ;; 		(newline 1)
 ;; 		(insert (make-string indent ?\s))))
-
 ;; (global-set-key (kbd "<return>") #'indent-relative)
 
-;; Initialize package sources
+;;----------------------------------------------------
+;; package config
+;;----------------------------------------------------
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
@@ -62,50 +120,87 @@
 (setq use-package-verbose t)
 (setq use-package-compute-statistics t)
 (use-package auto-package-update
-	:defer t
-	:custom
-		(auto-package-update-interval 7)
-		(auto-package-update-prompt-before-update t)
-		(auto-package-update-hide-results t)
-	:config
-		(auto-package-update-maybe)
-		(auto-package-update-at-time "09:00"))
-;; packages end
+  :defer t
+  :custom
+  (auto-package-update-interval 7)
+  (auto-package-update-prompt-before-update t)
+  (auto-package-update-hide-results t)
+  :config
+  (auto-package-update-maybe)
+  (auto-package-update-at-time "09:00"))
 
 
-;; (set-face-attribute 'variable-pitch nil :font "JetBrainsMono NF" :size 15 :weight 'regular)
-(set-frame-font "JetBrainsMono NF 13" nil t)
-(add-to-list 'default-frame-alist '(font . "JetBrainsMono NF 13"))
+;;----------------------------------------------------
 ;; ui tweaks
+;;----------------------------------------------------
 (use-package doom-themes
 	:demand
 	:config
-	(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-	doom-themes-enable-italic nil))   ; if nil, italics is universally disabled
- 	
+	(setq doom-themes-enable-bold t   
+	doom-themes-enable-italic nil)) 
 
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (setq custom-safe-themes t)
 (load-theme 'doom-zenburnv2)
 
-(use-package doom-modeline
-	;;:ensure t
-	:init (doom-modeline-mode 1)
-	:config
-	(setq doom-modeline-height 25      ;; sets modeline height
-		;;doom-modeline-bar-width 2    ;; sets right bar width
-		doom-modeline-buffer-file-name-style 'relative-from-project))
-		;; doom-modeline-buffer-name t
-		;; doom-modeline-icon t
-		;;doom-modeline-github t
-		;;doom-modeline-github-interval (* 30 60)))
-;; ui tweaks end
+;;-----------------------------------------------------
+;; mode-line
+;;-----------------------------------------------------
+(use-package mood-line
+  :ensure t
+  :init 
+  :config
+  (mood-line-mode)
+  ;; Use pretty Fira Code-compatible glyphs
+  :custom
+  (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
-;; key mapper
+(setq mood-line-format
+     (mood-line-defformat
+   :left
+   (((mood-line-segment-modal)            . " ")
+    ((or (mood-line-segment-buffer-status)
+         (mood-line-segment-client)
+         " ")                             . " ")
+    ((mood-line-segment-project)          . "/")
+    ((mood-line-segment-buffer-name)      . "  ")
+    ((mood-line-segment-anzu)             . "  ")
+    ((mood-line-segment-multiple-cursors) . "  ")
+    (mood-line-segment-cursor-position)
+    #(":" 0 1 (face mood-line-unimportant))
+    ((mood-line-segment-cursor-point)     . " ")
+    ((mood-line-segment-region)           . " ")
+    (mood-line-segment-scroll))
+   :right
+   (((mood-line-segment-indentation) . "  ")
+    ((mood-line-segment-eol)         . "  ")
+    ((mood-line-segment-encoding)    . "  ")
+    ((mood-line-segment-vc)          . "  ")
+    ((mood-line-segment-major-mode)  . "  ")
+    ((mood-line-segment-misc-info)   . "  ")
+    ((mood-line-segment-checker)     . "  ")
+    ((mood-line-segment-process)     . "  "))))
+
+;; (setq mood-line-glyph-alist mood-line-glyphs-ascii)
+;; (use-package doom-modeline
+;; 	;;:ensure t
+;; 	:init (doom-modeline-mode -1)
+;; 	:config
+;; 	(setq doom-modeline-height 25      ;; sets modeline height
+;; 		;;doom-modeline-bar-width 2    ;; sets right bar width
+;; 		doom-modeline-buffer-file-name-style 'relative-from-project))
+;; 		;; doom-modeline-buffer-name t
+;; 		;; doom-modeline-icon t
+;; 		;;doom-modeline-github t
+;; 		;;doom-modeline-github-interval (* 30 60)))
+
+;;----------------------------------------------------
+;; key table -> on SPC
+;;----------------------------------------------------
 (use-package which-key
 	:init
-		(which-key-mode 1)
-	:diminish
+	(which-key-mode 1)
+	;; :diminish
 	:config
 	(setq which-key-side-window-location 'bottom
 		which-key-sort-order #'which-key-key-order-alpha
@@ -121,41 +216,45 @@
 		which-key-allow-imprecise-window-fit nil
 		which-key-separator " → " ))
 
-;; vim-like
+
+;;----------------------------------------------------
+;; vim emulator
+;;----------------------------------------------------
 (use-package evil
 	:init
-		(setq evil-want-integration t)
-		(setq evil-want-keybinding nil)
-		(setq evil-want-C-u-scroll t)
-		(setq evil-want-C-i-jump nil)
+	(setq evil-want-integration t)
+	(setq evil-want-keybinding nil)
+	(setq evil-want-C-u-scroll t)
+	(setq evil-want-C-i-jump nil)
 	:demand ; No lazy loading
 	;;:defer t
 	:config
-		(evil-mode 1))
+    (evil-mode 1))
 
 (use-package evil-collection
 	:after evil
 	:config
-		(evil-collection-init))
+	(evil-collection-init))
 
-
+;;----------------------------------------------------
+;; some completion packages
+;;----------------------------------------------------
 (use-package counsel
 	:after ivy
 	:config 
-		(counsel-mode)
-		(setq ivy-initial-inputs-alist nil)) ;; removes starting ^ regex in M-x
+	(counsel-mode)
+	(setq ivy-initial-inputs-alist nil))
 
 (use-package ivy
 	:bind
-		;; ivy-resume resumes the last Ivy-based completion.
-		(("C-c C-r" . ivy-resume)
-		("C-x B" . ivy-switch-buffer-other-window))
+	(("C-c C-r" . ivy-resume)
+	("C-x B" . ivy-switch-buffer-other-window))
 	:custom
-		(setq ivy-use-virtual-buffers t)
-		(setq ivy-count-format "(%d/%d) ")
-		(setq enable-recursive-minibuffers t)
+	(setq ivy-use-virtual-buffers t)
+	(setq ivy-count-format "(%d/%d) ")
+	(setq enable-recursive-minibuffers t)
 	:config
-		(ivy-mode))
+	(ivy-mode))
 
 ;; (use-package all-the-icons-ivy-rich
 ;;  	:ensure t
@@ -164,27 +263,47 @@
 (use-package ivy-rich
 	:after ivy
 	:ensure t
-	:init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
-)
+	:init (ivy-rich-mode 1))
 
-;; 
+(use-package company
+	:defer nil
+	:diminish
+	:custom
+	(company-begin-commands '(self-insert-command))
+	(company-idle-delay .1)
+	(company-minimum-prefix-length 2)
+	(company-show-numbers t)
+	(company-tooltip-align-annotations 't)
+	(global-company-mode t))
+
+;; (use-package company-box
+;; 	:after company
+;; 	:diminish
+;; 	:hook (company-mode . company-box-mode))
+
+
+;;----------------------------------------------------
+;; key mappings
+;;----------------------------------------------------
 (use-package general
-	:after evil
+    ;; :after evil
+    :demand t
  	:config
   	;; (general-evil-setup)
   	;; set up 'SPC' as the global leader key
 	(general-create-definer leader-keys
     	:states '(normal insert visual emacs)
     	:keymaps 'override
-    	:prefix "SPC" ;; set leader
-    	:global-prefix "M-SPC") ;; access leader in insert mode
+    	:prefix "SPC"
+    	:global-prefix "M-SPC")
 
 	(leader-keys
     	"SPC" '(counsel-M-x :wk "Counsel M-x")
     	"." '(find-file :wk "Find file")
-		"," '(ivy-switch-buffer :wk "Switch to buffer")
-    	"=" '(perspective-map :wk "Perspective") ;; Lists all the perspective keybindings
-    	"c" '(comment-line :wk "Comment lines")
+	    "," '(ivy-switch-buffer :wk "Switch to buffer")
+    	"=" '(perspective-map :wk "Perspective")
+    	"/" '(comment-line :wk "Comment lines")
+    	"\\" '(counsel-grep-or-swiper :wk "Grep")
     	"u" '(universal-argument :wk "Universal argument"))
 
 	(leader-keys
@@ -208,9 +327,9 @@
 	
 	(leader-keys
 		"d" '(:ignore t :wk "Dired")
-		"d d" '(dired :wk "Open dired")
+		"d e" '(counsel-dired :wk "Open dired")
 		"d f" '(wdired-finish-edit :wk "Writable dired finish edit")
-		"d j" '(dired-jump :wk "Dired jump to current")
+		"d j" '(counsel-dired-jump :wk "Dired jump to current")
 		"d n" '(neotree-dir :wk "Open directory in neotree")
 		"d p" '(peep-dired :wk "Peep-dired")
 		"d w" '(wdired-change-to-wdired-mode :wk "Writable dired"))
@@ -255,23 +374,19 @@
 	
 	(leader-keys
 		"w" '(:ignore t :wk "Windows/Words")
-		;; window splits
 		"w c" '(evil-window-delete :wk "Close window")
 		"w n" '(evil-window-new :wk "New window")
 		"w s" '(evil-window-split :wk "Horizontal split window")
 		"w v" '(evil-window-vsplit :wk "Vertical split window")
-		;; window motions
 		"w h" '(evil-window-left :wk "Window left")
 		"w j" '(evil-window-down :wk "Window down")
 		"w k" '(evil-window-up :wk "Window up")
 		"w l" '(evil-window-right :wk "Window right")
 		"w w" '(evil-window-next :wk "Goto next window")
-		;; move Windows
 		"w H" '(buf-move-left :wk "Buffer move left")
 		"w J" '(buf-move-down :wk "Buffer move down")
 		"w K" '(buf-move-up :wk "Buffer move up")
 		"w L" '(buf-move-right :wk "Buffer move right")
-		;; words
 		"w d" '(downcase-word :wk "Downcase word")
 		"w u" '(upcase-word :wk "Upcase word")
 		"w =" '(count-words :wk "Count words/lines for buffer"))
@@ -289,7 +404,6 @@
 		"l s b" '(flymake-show-buffer-diagnostics :wk "Buffer diagnostics")
 		"l s p" '(flymake-show-project-diagnostics :wk "Project diagnostics")
 		"l f" '(eglot-format :wk "Eglot format"))
-
 
 	(leader-keys
 		"g" '(:ignore t :wk "Git")    
@@ -315,31 +429,24 @@
 		"g u" '(magit-stage-file :wk "Git unstage file"))
 )
 
-(use-package company
-	:defer 2
-	:diminish
-	:custom
-	(company-begin-commands '(self-insert-command))
-	(company-idle-delay .1)
-	(company-minimum-prefix-length 2)
-	(company-show-numbers t)
-	(company-tooltip-align-annotations 't)
-	(global-company-mode t))
-
-(use-package company-box
-	:after company
-	:diminish
-	:hook (company-mode . company-box-mode))
-
-;; project manager 
+;;----------------------------------------------------
+;; project manager
+;;----------------------------------------------------
 (use-package projectile
 	:defer t
 	:general
 	:init
 	(projectile-mode +1))
 
+(defun projectile-proj-find-function (dir)
+	(let ((root (projectile-project-root dir)))
+		(and root (cons 'transient root))))
+
 ;;(use-package magit :defer t)
 
+;;----------------------------------------------------
+;; startup dashboard
+;;----------------------------------------------------
 (use-package dashboard
 	:ensure t 
 	:init
@@ -347,20 +454,19 @@
 	(setq dashboard-set-heading-icons nil)
 	(setq dashboard-set-file-icons t)
 	(setq dashboard-banner-logo-title "Hey!")
-	(setq dashboard-startup-banner nil) ;; use standard emacs logo as banner
-	;;(setq dashboard-startup-banner "~/.config/emacs/images/logo.png")  ;; use custom image as banner
-	(setq dashboard-center-content nil) ;; set to 't' for centered content
+	(setq dashboard-startup-banner nil) 
+	(setq dashboard-center-content nil) 
 	(setq dashboard-items '((recents . 5)
-							;(agenda . 5 )
-							;(bookmarks . 3)
-							(projects . 3)))
-							;(registers . 3)))
+			                (projects . 3)))
 	:custom 
 	(dashboard-modify-heading-icons '((recents . "file-text")
-						(bookmarks . "book")))
+						              (bookmarks . "book")))
 	:config
 	(dashboard-setup-startup-hook))
 
+;;----------------------------------------------------
+;; syntax highlighting  
+;;----------------------------------------------------
 (use-package tree-sitter
   	:ensure t)
 (use-package tree-sitter-langs
@@ -376,73 +482,102 @@
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
+;;----------------------------------------------------
+;; Eglot (not lsp-mode)
+;;----------------------------------------------------
 (use-package eglot
-  	:ensure t)
+  :hook ((go-mode . eglot-ensure)
+         (c++-mode . eglot-ensure)
+         (c-mode . eglot-ensure)
+         (rust-mode . eglot-ensure))
+  :custom
+  (eglot-autoshutdown t))
 
-(defun projectile-proj-find-function (dir)
-	(let ((root (projectile-project-root dir)))
-		(and root (cons 'transient root))))
+;; docs viewer
+(use-package eldoc
+  :commands (eldoc-mode)
+  :custom
+  (setq eldoc-documentation-strategy 'eldoc-documentation-default)
+  :diminish eldoc-mode)
+(set-face-attribute 'eldoc-highlight-function-argument nil)
 
-(add-hook 'c-mode-hook 'eglot-ensure)
-(add-hook 'c++-mode-hook 'eglot-ensure)
-(add-hook 'go-mode-hook 'eglot-ensure)
-(add-hook 'rust-mode-hook 'eglot-ensure)
+;; holy c
+(use-package c-mode
+  :ensure nil
+  :mode (("\\.c\\'" . c-mode)
+	     ("\\.h\\'" . c-mode))
+  :defer t
+  :custom
+  (add-to-list 'eglot-server-programs '((c-mode) . ("clangd")))
+  :hook (c-mode . eglot-ensure))
 
-(set-face-attribute 'mode-line nil
-                    :background "#212121"
-		    		:family "JetBrainsMono NF"
-		    		:height 130
-                    ;;:foreground "white"
-                    :box '(:line-width 4 :color "#212121")
-                    :overline nil
-                    :underline nil)
+;; chaotic c++
+(use-package c++-mode
+  :ensure nil
+  :mode (("\\.cc\\'" . c++-mode)
+	     ("\\.cpp\\'" . c++-mode)
+	     ;; ("\\.h\\'" . c++-mode)
+	     ("\\.hh\\'" . c++-mode)
+	     ("\\.hpp\\'" . c++-mode))
+  :defer t
+  :custom
+  (add-to-list 'eglot-server-programs '((c++-mode) . ("clangd")))
+  :hook (c++-mode . eglot-ensure))
 
-(set-face-attribute 'mode-line-inactive nil
-                    :background "#212121"
-		    		:family "JetBrainsMono NF"
-		    		:height 130
-                    ;;:foreground "white"
-                    :box '(:line-width 4 :color "#212121")
-                    :overline nil
-                    :underline nil)
+;; simple go
+(use-package go-mode
+  :defer t
+  :config
+  :mode ("\\.go\\'" . go-mode)
+  :custom
+  (add-to-list 'eglot-server-programs '((go-mode) . ("gopls")))
+  :hook
+  (go-mode . eglot-ensure)
+  (before-save-hook . gofmt-before-save))
 
-(set-face-attribute 'minibuffer nil
-                    :background "#212121"
-		    		:family "JetBrainsMono NF"
-		    		:height 130
-                    ;;:foreground "white"
-                    :box '(:line-width 4 :color "#212121")
-                    :overline nil
-                    :underline nil)
+;; borrow-checker fight
+(use-package rustic
+  :defer t
+  :mode ("\\.rs$" . rust-mode)
+  :custom
+  (rustic-format-on-save t)
+  (rustic-indent-method-chain t)
+  (rustic-lsp-server 'rust-analyzer))
 
-(set-face-attribute 'minibuffer-prompt nil
-                    :background "#212121"
-		    		:family "JetBrainsMono NF"
-		    		:height 130
-                    ;;:foreground "white"
-                    :box '(:line-width 4 :color "#212121")
-                    :overline nil
-                    :underline nil)
+;; (add-hook 'c-mode-hook 'eglot-ensure)
+;; (add-hook 'c++-mode-hook 'eglot-ensure)
+;; (add-hook 'go-mode-hook 'eglot-ensure)
+;; (add-hook 'rust-mode-hook 'eglot-ensure)
 
+;; elsip
+(add-hook 'emacs-lisp-mode-hook
+              (lambda ()
+                ;; Use spaces, not tabs.
+                (setq indent-tabs-mode nil)
+                ;; Keep M-TAB for `completion-at-point'
+                (define-key flyspell-mode-map "\M-\t" nil)
+                ;; Pretty-print eval'd expressions.
+                (define-key emacs-lisp-mode-map
+                            "\C-x\C-e" 'pp-eval-last-sexp)
+                ;; Recompile if .elc exists.
+                (add-hook (make-local-variable 'after-save-hook)
+                          (lambda ()
+                            (byte-force-recompile default-directory)))
+                (define-key emacs-lisp-mode-map
+                            "\r" 'reindent-then-newline-and-indent)))
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 
-
-(after! doom-modeline
-  (doom-modeline-def-modeline 'main
-    '(bar matches buffer-info remote-host buffer-position parrot selection-info)
-    '(misc-info minor-modes checker input-method buffer-encoding major-mode process vcs "  ")))
-
-(add-hook! 'doom-modeline-mode-hook
-  (let ((char-table char-width-table))
-    (while (setq char-table (char-table-parent char-table)))
-    (dolist (pair doom-modeline-rhs-icons-alist)
-      (let ((width 2)  ; <-- tweak this
-            (chars (cdr pair))
-            (table (make-char-table nil)))
-        (dolist (char chars)
-          (set-char-table-range table char width))
-        (optimize-char-table table)
-        (set-char-table-parent table char-table)
-        (setq char-width-table table)))))
-    
-    
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(mood-line bash-mode rustic go-mode flycheck which-key tree-sitter-langs projectile ivy-rich general evil-collection doom-themes dashboard counsel auto-package-update)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

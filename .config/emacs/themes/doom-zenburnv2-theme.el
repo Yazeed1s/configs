@@ -155,10 +155,10 @@ Can be an integer to determine the exact padding."
                  (link :foreground yellow-2 :underline t :weight 'bold)
                  (minibuffer-prompt :foreground yellow)
                  (mode-line
-                  :background modeline-bg :foreground modeline-fg
+                  :background (doom-darken bg 0.15) :foreground grey
                   :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
                  (mode-line-inactive
-                  :background modeline-bg-inactive :foreground modeline-fg-alt
+                  :background (doom-darken bg 0.15) :foreground grey
                   :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
                  (mode-line-emphasis :foreground (if -modeline-bright base8 highlight))
                  (success :foreground green :weight 'bold)
@@ -343,6 +343,43 @@ Can be an integer to determine the exact padding."
                  (woman :inherit 'font-lock-keyword-face)
                  (woman :inherit 'font-lock-string-face italic)
 
+		 ;; dired
+                 (diredfl-compressed-file-name :foreground yellow)
+                 (diredfl-dir-heading :foreground magenta)
+                 (diredfl-dir-name :foreground blue)
+                 (diredfl-deletion :foreground red :background (doom-darken red 0.55))
+                 (diredfl-deletion-file-name :foreground red
+                                             :background (doom-darken red 0.55))
+                 (diredfl-file-name :foreground orange)
+                 (dired-flagged :foreground red :background (doom-darken red 0.55))
+                 (diredfl-symlink :foreground magenta)
+
+    ;;;; dired <built-in>
+    (dired-directory  :foreground blue)
+    (dired-ignored    :foreground grey)
+    (dired-flagged    :foreground red)
+    (dired-header     :foreground orange :weight 'bold)
+    (dired-mark       :foreground orange :weight 'bold)
+    (dired-marked     :foreground magenta :weight 'bold)
+    (dired-perm-write :foreground fg)
+    (dired-symlink    :foreground yellow :weight 'bold)
+    (dired-warning    :foreground red)
+    ;;;; dired+
+    (diredp-file-name              :foreground fg)
+    (diredp-dir-name               :foreground blue :weight 'bold)
+    (diredp-ignored-file-name      :foreground grey)
+    (diredp-compressed-file-suffix :foreground magenta)
+    (diredp-symlink                :foreground yellow)
+    (diredp-dir-heading            :foreground blue  :weight 'bold)
+    (diredp-file-suffix            :foreground violet)
+    (diredp-read-priv              :foreground magenta)
+    (diredp-write-priv             :foreground green)
+    (diredp-exec-priv              :foreground yellow)
+    (diredp-rare-priv              :foreground red   :weight 'bold)
+    (diredp-dir-priv               :foreground blue  :weight 'bold)
+    (diredp-no-priv                :foreground base5)
+    (diredp-number                 :foreground magenta)
+    (diredp-date-time              :foreground blue)
                  ;; tree-sitter
                  (tree-sitter-hl-face:method.call :foreground green :weight 'regular)
                  (tree-sitter-hl-face:function.call :foreground green :weight 'regular)
@@ -357,6 +394,13 @@ Can be an integer to determine the exact padding."
                  (tree-sitter-hl-face:type.qualifier :foreground yellow :weight 'regular)
                  (tree-sitter-hl-face:type.definition :foreground yellow :weight 'regular)
                  (tree-sitter-hl-face:namespace :foreground yellow :weight 'regular)
+
+                 (mode-line-buffer-id :foreground red :weight 'bold)
+;;;; which-key
+    (which-key-key-face                   :foreground green)
+    (which-key-group-description-face     :foreground yellow)
+    (which-key-command-description-face   :foreground blue)
+    (which-key-local-map-description-face :foreground magenta)
                  )
   ;;;; Base theme variable overrides-
                 ())
