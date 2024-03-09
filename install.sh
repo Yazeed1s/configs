@@ -72,6 +72,8 @@
 # fd: GNU's find alternative
 # ripgrep: GNU's grep alternative
 # gdu: ncdu but faster
+# ltrace: lib call trace
+# strace: sys call trace
 
 INSTALLERDIR=$(dirname "$0")
 
@@ -92,7 +94,8 @@ pacman_packages=(
 	networkmanager wpa_supplicant wireless_tools
 	netctl dialog lvm2
 	rsync tmux fzf
-	emacs fd ripgrep gdu
+	emacs fd ripgrep 
+    gdu ltrace strace
 )
 
 # Install packages with pacman

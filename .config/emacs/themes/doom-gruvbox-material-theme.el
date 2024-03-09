@@ -243,10 +243,10 @@ Defaults to \"material\""
                   :foreground doc-comments)
 
                  (mode-line
-                  :background modeline-bg :foreground modeline-fg
+                  :background modeline-bg :foreground grey
                   :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
                  (mode-line-inactive
-                  :background modeline-bg-inactive :foreground modeline-fg-alt
+                  :background modeline-bg-inactive :foreground grey
                   :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
                  (mode-line-emphasis
                   :foreground (if -modeline-bright base8 highlight))
@@ -267,7 +267,7 @@ Defaults to \"material\""
                  (doom-modeline-buffer-project-root :foreground blue :weight 'bold)
 
                  ;; ivy-mode
-                 (ivy-current-match :background blue :distant-foreground base0 :weight 'bold)
+                 (ivy-current-match :background bg-alt :weight 'bold)
                  ;; (ivy-current-match :foreground blue :background bg)
                  (ivy-minibuffer-match-face-2 :foreground blue :background bg)
 
@@ -360,8 +360,12 @@ Defaults to \"material\""
                  ;; tree sitter
                  (tree-sitter-hl-face:method.call :foreground green :weight 'regular)
                  (tree-sitter-hl-face:function.call :foreground green :weight 'regular)
+                 (tree-sitter-hl-face:function.builtin :foreground green :weight 'regular)
                  (tree-sitter-hl-face:punctuation.bracket :foreground grey :weight 'regular)
                  (tree-sitter-hl-face:punctuation.delimiter :foreground grey :weight 'regular)
+                 (tree-sitter-hl-face:structure.separator :foreground grey :weight 'regular)
+                 (tree-sitter-hl-face:structure.open :foreground grey :weight 'regular)
+                 (tree-sitter-hl-face:structure.close :foreground grey :weight 'regular)
                  (tree-sitter-hl-face:type.builtin :foreground blue :weight 'regular)
                  (tree-sitter-hl-face:type :foreground blue :weight 'regular)
                  (tree-sitter-hl-face:operator :foreground red :weight 'regular)

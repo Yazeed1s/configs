@@ -1,4 +1,4 @@
-(setq idle-update-delay 2)
+;; (setq idle-update-delay 2)
 
 (setq gc-cons-threshold 63000000
       gc-cons-percentage 0.6)
