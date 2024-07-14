@@ -9,86 +9,87 @@
 ;;
 ;;; Variables
 
-(defgroup doom-zenburnv2-theme nil
+(defgroup doom-zenburnv2-light-theme nil
   "Options for the `doom-zenburn' theme."
   :group 'doom-themes)
 
 (defcustom doom-zenburn-brighter-modeline nil
   "If non-nil, more vivid colors will be used to style the mode-line."
-  :group 'doom-zenburnv2-theme   :type 'boolean)
+  :group 'doom-zenburnv2-light-theme   :type 'boolean)
 
 (defcustom doom-zenburn-brighter-comments nil
   "If non-nil, comments will be highlighted in more vivid colors."
-  :group 'doom-zenburnv2-theme   :type 'boolean)
+  :group 'doom-zenburnv2-light-theme   :type 'boolean)
 
 (defcustom doom-zenburn-comment-bg doom-zenburn-brighter-comments
   "If non-nil, comments will have a subtle, darker background.
 Enhances their legibility."
-  :group 'doom-zenburnv2-theme   :type 'boolean)
+  :group 'doom-zenburnv2-light-theme   :type 'boolean)
 
 (defcustom doom-zenburn-padded-modeline doom-themes-padded-modeline
   "If non-nil, adds a 4px padding to the mode-line.
 Can be an integer to determine the exact padding."
-  :group 'doom-zenburnv2-theme   :type '(choice integer boolean))
+  :group 'doom-zenburnv2-light-theme   :type '(choice integer boolean))
 
 
 ;;
 ;;; Theme definition
 
-(def-doom-theme doom-zenburnv2
+(def-doom-theme doom-zenburnv2-light
                 "An implementation of the popular Zenburn theme."
 
                 ;; name        default   256       16
                 (
-                 ;;(bg         '("#3F3F3F" nil       nil            )) ;; zenburn-bg
-                 ;; (bg         '("#2b2b2b" nil       nil            )) ;; zenburn-bg
-                 (bg         '("#212121" nil       nil            )) ;; zenburn-bg
-                 ;; (bg         '("#161616" nil       nil            )) ;; zenburn-bg
-                 (bg-alt     '("#383838" nil       nil            )) ;; zenburn-bg-05
+                 ;; (bg         '("#ecebe3" nil       nil            )) ;; zenburn-bg
+                 ;; (bg         '("#e9e8de" nil       nil            )) ;; zenburn-bg
+                 ;; (bg         '("#e1e0d2" nil       nil            )) ;; zenburn-bg
+                 ;; (bg         '("#d7d5c3" nil       nil            )) ;; zenburn-bg
+                 (bg         '("#d7d5c3" nil       nil            )) ;; zenburn-bg
+                 (bg-alt     '("#d1d0c7" nil       nil            )) ;; zenburn-bg-05
                  (base0      '("#000000" "black"   "black"        )) ;; zenburn-bg-2
-                 (base1      '("#2B2B2B" "#1e1e1e" "brightblack"  )) ;; zenburn-bg-1
-                 (base2      '("#303030" "#2e2e2e" "brightblack"  )) ;; zenburn-bg-08
-                 (base3      '("#383838" "#262626" "brightblack"  )) ;; zenburn-bg-05
+                 (base1      '("#bcbcb5" "#1e1e1e" "brightblack"  )) ;; zenburn-bg-1
+                 (base2      '("#a5a49e" "#2e2e2e" "brightblack"  )) ;; zenburn-bg-08
+                 (base3      '("#8d8d88" "#262626" "brightblack"  )) ;; zenburn-bg-05
                  (base4      '("#7a7d7a" "#7a7d7a" "brightblack"  )) ;; zenburn-bg+05
-                 (base5      '("#4F4F4F" "#525252" "brightblack"  )) ;; zenburn-bg+1
+                 (base5      '("#a5a49e" "#525252" "brightblack"  )) ;; zenburn-bg+1
                  (base6      '("#5F5F5F" "#6b6b6b" "brightblack"  )) ;; zenburn-bg+2
-                 (base7      '("#97969a" "#97969a" "brightblack"  )) ;; zenburn-bg+3
+                 (base7      '("#a3a29b" "#97969a" "brightblack"  )) ;; zenburn-bg+3
                  (base8      '("#FFFFEF" "#dfdfdf" "white"        )) ;; zenburn-fg+1
-                 (fg         '("#d4d4c0" "#d4d4c0" "brightwhite"  )) ;; zenburn-fg
-                 (fg-alt     '("#d4d4c0" "#d4d4c0" "white"        )) ;; zenburn-fg-05
+                 (fg         '("#4b4b48" "#5e5e5a" "brightwhite"  )) ;; zenburn-fg
+                 (fg-alt     '("#4b4b48" "#5e5e5a" "white"        )) ;; zenburn-fg-05
 
                  (grey       base4)
-                 (greyp      base7)
-                 (red        '("#CC9393" "#CC9393" "red"          )) ;; zenburn-red
-                 (orange     '("#caa58a" "#caa58a" "brightred"    )) ;; zenburn-orange
-                 (green      '("#a7bc99" "#a7bc99" "green"        )) ;; zenburn-green
-                 (teal       '("#4db5bd" "#44b9b1" "brightgreen"  )) ;; zenburn-??
-                 (yellow     '("#d2b9a5" "#d2b9a5" "yellow"       )) ;; zenburn-yellow
-                 (blue       '("#b5c2b5" "#b5c2b5" "brightblue"   )) ;; zenburn-blue
-                 (dark-blue  '("#2257A0" "#2257A0" "blue"         )) ;; zenburn-??
-                 (magenta    '("#DC8CC3" "#c678dd" "brightmagenta")) ;; zenburn-magenta
-                 (violet     '("#a9a1e1" "#a9a1e1" "magenta"      )) ;; zendurn-??
-                 (cyan       '("#93E0E3" "#46D9FF" "brightcyan"   )) ;; zenburn-cyan
-                 (dark-cyan  '("#5699AF" "#5699AF" "cyan"         )) ;; zenburn-??
+                 (greyp      base4)
+                 (red        '("#7d4242" "#7d4242" "red"          )) ;; zenburn-red
+                 (orange     '("#784367" "#784367" "brightred"    )) ;; zenburn-orange
+                 (green      '("#4a6934" "#4a6934" "green"        )) ;; zenburn-green
+                 (teal       '("#266662" "#266662" "brightgreen"  )) ;; zenburn-??
+                 (yellow     '("#855959" "#855959" "yellow"       )) ;; zenburn-yellow
+                 (blue       '("#3c6362" "#3c6362" "brightblue"   )) ;; zenburn-blue
+                 (dark-blue  '("#3c6362" "#3c6362" "blue"         )) ;; zenburn-??
+                 (magenta    '("#784367" "#784367" "brightmagenta")) ;; zenburn-magenta
+                 (violet     '("#784367" "#784367" "magenta"      )) ;; zendurn-??
+                 (cyan       '("#784367" "#784367" "brightcyan"   )) ;; zenburn-cyan
+                 (dark-cyan  '("#784367" "#784367" "cyan"         )) ;; zenburn-??
                  ;; Extra zenburn colors
-                 (fg-1       '("#656555"))
-                 (fg+2       '("#f2f2dc"))
-                 (red-4      '("#8C5353"))
-                 (red-1      '("#BC8383"))
-                 (red+1      '("#DCA3A3"))
-                 (yellow-2   '("#D0BF8F"))
-                 (yellow-1   '("#E0CF9F"))
-                 (green-2    '("#5F7F5F"))
-                 (green+1    '("#8FB28F"))
-                 (green+2    '("#9FC59F"))
-                 (green+3    '("#AFD8AF"))
-                 (green+4    '("#BFEBBF"))
-                 (blue+1     '("#94BFF3"))
-                 (blue-1     '("#7CB8BB"))
-                 (blue-2     '("#6CA0A3"))
-                 (blue-3     '("#5C888B"))
-                 (blue-4     '("#4C7073"))
-                 (blue-5     '("#366060"))
+                 (fg-1       '("#4b4b48"))
+                 (fg+2       '("#4b4b48"))
+                 (red-4      '("#7d4242"))
+                 (red-1      '("#7d4242"))
+                 (red+1      '("#7d4242"))
+                 (yellow-2   '("#855959"))
+                 (yellow-1   '("#855959"))
+                 (green-2    '("#546b43"))
+                 (green+1    '("#546b43"))
+                 (green+2    '("#546b43"))
+                 (green+3    '("#546b43"))
+                 (green+4    '("#546b43"))
+                 (blue+1     '("#4b6160"))
+                 (blue-1     '("#4b6160"))
+                 (blue-2     '("#4b6160"))
+                 (blue-3     '("#4b6160"))
+                 (blue-4     '("#4b6160"))
+                 (blue-5     '("#4b6160"))
 
 
                  ;; face categories -- required for all themes
@@ -137,7 +138,7 @@ Can be an integer to determine the exact padding."
                  (modeline-bg-inactive-l `(,(car bg-alt) ,@(cdr base1))))
 
   ;;;; Base theme face overrides
-                ((cursor :foreground fg :background base8)
+                ((cursor :foreground fg :background blue)
                  (escape-glyph :foreground yellow :weight 'bold)
                  (font-lock-builtin-face :foreground fg)
                  (font-lock-comment-delimiter-face :foreground grey)
@@ -148,7 +149,7 @@ Can be an integer to determine the exact padding."
                  (font-lock-type-face :foreground blue)
                  (font-lock-warning-face :foreground yellow-1 :weight 'bold)
                  (font-lock-keyword-face :foreground yellow)
-                 (highlight :background base4)
+                 (highlight :background base7)
                  (isearch :freground yellow-2 :weight 'bold :background base6)
                  (isearch-fail :foreground fg :background red-4)
                  (lazy-highlight :foreground yellow-2 :weight 'bold :background base3)
@@ -388,7 +389,7 @@ Can be an integer to determine the exact padding."
                  (tree-sitter-hl-face:punctuation.bracket :foreground greyp :weight 'regular)
                  (tree-sitter-hl-face:punctuation.delimiter :foreground greyp :weight 'regular)
                  (tree-sitter-hl-face:type.builtin :foreground blue :weight 'regular)
-                 (tree-sitter-hl-face:type :foreground blue :weight 'regular)
+                 (tree-sitter-hl-face:type :foreground fg :weight 'regular)
                  (tree-sitter-hl-face:operator :foreground red :weight 'regular)
                  (tree-sitter-hl-face:function.macro :foreground red :weight 'regular)
                  (tree-sitter-hl-face:property :foreground fg :weight 'regular)

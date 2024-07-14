@@ -52,8 +52,8 @@ Defaults to \"material\""
 ;; https://github.com/sainnhe/gruvbox-material-vscode/tree/master/src/palette
 (cond
  ((equal doom-gruvbox-material-background "hard")
-  (setq gm/bg           "#202020"       ;; bg 161616
-        gm/bg-alt       "#202020"       ;; bg2
+  (setq gm/bg           "#161616"       ;; bg 161616
+        gm/bg-alt       "#161616"       ;; bg2
         gm/base0        "#131414"       ;; bg1
         gm/base1        "#202020"       ;; bg2
         gm/base2        "#2e2c2b"       ;; bg3
@@ -76,7 +76,7 @@ Defaults to \"material\""
         gm/base7        "#665c54"       ;; bg8
         gm/base8        "#7c6f64"))     ;; grey0
  (t
-  (setq gm/bg           "#181919"       ;; bg
+  (setq gm/bg           "#161616"       ;; bg
         gm/bg-alt       "#3c3836"       ;; bg2
         gm/base0        "#242424"       ;; bg1
         gm/base1        "#3c3836"       ;; bg2
@@ -150,7 +150,7 @@ Defaults to \"material\""
 (def-doom-theme doom-gruvbox-material
                 "A dark theme inspired by gruvbox material"
                 ;; name       default                 256       16
-                ((bg          `(,gm/bg                "#282828"       nil            ))
+                ((bg          `(,gm/bg                "#161616"       nil            ))
                  (bg-alt      `(,gm/bg-alt            "#303030"       nil            ))
                  (base0       `(,gm/base0             "black"   "black"        ))
                  (base1       `(,gm/base1             "#121212" "brightblack"  ))
@@ -243,10 +243,10 @@ Defaults to \"material\""
                   :foreground doc-comments)
 
                  (mode-line
-                  :background modeline-bg :foreground modeline-fg
+                  :background modeline-bg :foreground grey
                   :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg)))
                  (mode-line-inactive
-                  :background modeline-bg-inactive :foreground modeline-fg-alt
+                  :background modeline-bg-inactive :foreground grey
                   :box (if -modeline-pad `(:line-width ,-modeline-pad :color ,modeline-bg-inactive)))
                  (mode-line-emphasis
                   :foreground (if -modeline-bright base8 highlight))
@@ -267,7 +267,7 @@ Defaults to \"material\""
                  (doom-modeline-buffer-project-root :foreground blue :weight 'bold)
 
                  ;; ivy-mode
-                 (ivy-current-match :background blue :distant-foreground base0 :weight 'bold)
+                 (ivy-current-match :background bg-alt :weight 'bold)
                  ;; (ivy-current-match :foreground blue :background bg)
                  (ivy-minibuffer-match-face-2 :foreground blue :background bg)
 
@@ -360,8 +360,12 @@ Defaults to \"material\""
                  ;; tree sitter
                  (tree-sitter-hl-face:method.call :foreground green :weight 'regular)
                  (tree-sitter-hl-face:function.call :foreground green :weight 'regular)
+                 (tree-sitter-hl-face:function.builtin :foreground green :weight 'regular)
                  (tree-sitter-hl-face:punctuation.bracket :foreground grey :weight 'regular)
                  (tree-sitter-hl-face:punctuation.delimiter :foreground grey :weight 'regular)
+                 (tree-sitter-hl-face:structure.separator :foreground grey :weight 'regular)
+                 (tree-sitter-hl-face:structure.open :foreground grey :weight 'regular)
+                 (tree-sitter-hl-face:structure.close :foreground grey :weight 'regular)
                  (tree-sitter-hl-face:type.builtin :foreground blue :weight 'regular)
                  (tree-sitter-hl-face:type :foreground blue :weight 'regular)
                  (tree-sitter-hl-face:operator :foreground red :weight 'regular)
