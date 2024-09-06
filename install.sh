@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # The following will attempt to install all needed packages I usually use
-# This is a quick and dirty script; there are no error checking
+# This is a quick and dirty script; there are useless error checking
 # This script is meant to run on a clean fresh Arch install
 #
 # NOTE:
@@ -15,66 +15,65 @@
 # polybar: status bar for Xorg
 # sxhkd: key bindings mapper for bspwm
 # bspwm: window manager
+# zwm: another window manager
 # rofi: application launcher (used for window switching)
 # dmenu: application launcher
 # btop: CLI-based system monitor
 # nemo: a graphical file manager
 # alacritty: a terminal
-# firefox: yeah, I use Firefox
-# neovim: a text editor
+# firefox: yeah, I use firefox
+# emacs: a text editor. No it's actually another os wihin my os
 # vim: another text editor
-# vscodium-bin: another text editor
 # nitrogen: wallpaper switcher
 # ttf-jetbrains-mono: JetBrains Mono font
-# ttf-jetbrains-mono-nerd: Some nerd fonts for icons and overall look
+# ttf-jetbrains-mono-nerd: the nerd jt font brother 
 # noto-fonts-emoji: fonts needed by the weather script in the top bar
-# brightnessctl: used to control monitor brightness level
-# gvfs: adds missing functionality to Thunar such as auto-mounting USB drives
-# bluez: the Bluetooth service
-# bluez-utils: command-line utilities to interact with Bluetooth devices
-# lxappearance: used to set GTK theme
-# go: Go programming language
-# rust: Rust programming language
-# cmake: Cross-platform build system
+# brightnessctl: used to control monitor brightness
+# gvfs: adds missing functionality to file managers such as auto-mounting USB drives
+# bluez: the bluetooth thing
+# bluez-utils: command-line utilities to interact with bluetooth devices
+# lxappearance: used to set GTK theme and global font
+# go: go programming language
+# rust: rust programming language
+# cmake: build system
 # clang: C and C++ compiler
-# grpc: Google's remote procedure call (RPC) framework
-# protobuf: Protocol Buffers
-# pavucontrol: PulseAudio volume control
-# openssh: OpenSSH client and server
+# grpc: google's remote procedure call (RPC) framework
+# protobuf: protocol buffers
+# pavucontrol: pulseaudio volume control
+# openssh: openSSH client and server
 # dmidecode: DMI table decoder
-# zsh: Zsh shell
-# amd-ucode: Microcode updates for AMD processors
-# arandr: A simple visual front end for XRandR
-# amdgpu_top: A command-line tool for monitoring AMD GPU utilization
-# pulseaudio: Sound server
+# zsh: zsh shell
+# amd-ucode: microcode updates for AMD processors
+# arandr: front end for XRandR
+# amdgpu_top: command-line tool for monitoring AMD GPU utilization
+# pulseaudio: sound server, rarely works
 # alsa-utils: Advanced Linux Sound Architecture (ALSA) utilities
 # xf86-video-qxl: Xorg QXL video driver for virtualized environments
 # xorg: Xorg display server
 # xorg-xinit: Xorg initialization
-# pacman-contrib: Useful additional tools and scripts for pacman package manager
-# git: Version control system
-# mesa: Graphics library for 3D applications
-# base-devel: Development tools (for compiling AUR packages)
-# networkmanager: Network connection manager
-# wpa_supplicant: Wireless network authentication
-# wireless_tools: Tools for wireless network configuration
-# netctl: Network control utility
-# dialog: A tool to create dialog boxes from shell scripts
+# pacman-contrib: common additional tools/libs and scripts for pacman package manager
+# git: I don't know what this is
+# mesa: graphics library for 3D applications
+# base-devel: common gevelopment tools/libs (for compiling AUR packages)
+# networkmanager: network connection manager
+# wpa_supplicant: wireless network authentication
+# wireless_tools: tools for wireless network configuration
+# netctl: network control utility
+# dialog: a tool to create dialog boxes from shell scripts
 # lvm2: Logical Volume Management tools
-# rsync: Remote file synchronization tool
-# tmux: Terminal multiplexer
+# rsync: remote file synchronization tool
+# tmux: terminal multiplexer
 # fzf: cli fuzzy finder
 # ufw: firewall rules manger
-# mariadb/mysql: MariaDB is the default implementation of MySQL in Arch Linux
-# postgresql: postgresql db
-# fastfetch: neofetch for sys-info
+# ripgrep: faster grep
+# fd: faster find
 
 INSTALLERDIR=$(dirname "$0")
 
 pacman_packages=(
-	fastfetch picom polybar sxhkd bspwm 
+	picom polybar sxhkd bspwm 
 	rofi dmenu btop nemo alacritty 
-    	firefox neovim vim nitrogen 
+    firefox emacs vim nitrogen 
 	brightnessctl gvfs bluez bluez-utils 
 	lxappearance go rust cmake 
 	clang grpc protobuf pavucontrol 
@@ -84,82 +83,40 @@ pacman_packages=(
 	pacman-contrib git mesa
 	base-devel networkmanager wpa_supplicant
 	wireless_tools netctl dialog lvm2
-	rsync tmux fzf
+	rsync tmux fzf fd ripgrep
 )
 
-# Install packages with pacman
-echo -e "Installing packages with pacman...\n"
+# install packages with pacman
+echo -e "installing packages with pacman...\n"
 if ! sudo pacman -S "${pacman_packages[@]}"; then
-    echo -e "Error: pacman installation failed. Exiting script.\n"
+    echo -e "ERROR: pacman installation failed. Exiting script.\n"
     exit 1
 fi
 
 # start the SSH server
-read -n1 -rep 'would you like to start SSH server? (y,n)' HYP
+read -n1 -rep 'wanna start SSH server? (y,n)' HYP
 if [[ $HYP == "Y" || $HYP == "y" ]]; then
-	echo -e "Starting SSH server...\n"
+	echo -e "starting SSH server...\n"
 	if sudo systemctl enable --now sshd; then
     		echo -e "SSH server started successfully.\n"
     		sleep 3
 	else
-    		echo -e "Error: Failed to start the SSH server. Exiting script.\n"
+    		echo -e "ERROR: failed to start the SSH server. Exiting script.\n"
     		exit 1
 	fi
 fi
 
-# start NetworkManager
-echo -e "Starting NetworkManager....\n"
+# start networkmanager
+echo -e "starting networkmanager....\n"
 if sudo systemctl enable --now NetworkManager; then
-    echo -e "NetworkManager started successfully.\n"
+    echo -e "networkmanager started successfully.\n"
     sleep 3
 else
-    echo -e "Error: Failed to start NetworkManager. Exiting script.\n"
+    echo -e "ERROR: failed to start networkmanager. Exiting script.\n"
     exit 1
 fi
 
-# Start MySQL (MariaDB)
-read -n1 -rep 'setup a MySQL (MariaDB) (y,n)' HYP
-if [[ $HYP == 'Y' || $HYP == 'y' ]]; then	
-	echo -e "Starting MariaDB...\n"	
-	if sudo pacman -S "mariadb"; then
-		if mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql && sudo systemctl enable mariadb.service; then
-    			echo -e "MariaDB started successfully.\n"
-    			sleep 3
-		else
-    			echo -e "Error: Failed to start MariaDB. Exiting script.\n"
-    			exit 1
-		fi
-	else
-		echo -e "Error: Failed to install MariaDB. Exiting...\n"
-		exit 1
-	fi
-fi
-
-# Start PostgreSQL 
-read -n1 -rep 'setup a PostgreSQL (y,n)' HYP
-if [[ $HYP == 'Y' || $HYP == 'y' ]]; then
-	echo -e "Starting PostgreSQL...\n"
-	if sudo pacman -S "postgresql"; then
-		# switch to the postgres user and initialize the data directory
-		if sudo -iu postgres && initdb -D /var/lib/postgres/data && exit; then
-    			echo -e "PostgreSQL initialized successfully.\n"
-    			sleep 3
-			# enable the PostgreSQL service
-			if sudo systemctl enable postgresql; then
-    				echo -e "PostgreSQL service enabled successfully.\n"
-			else
-    				echo -e "Error: Failed to enable PostgreSQL service. Exiting script.\n"
-    			exit 1
-
-			fi
-		else
-    			echo -e "Error: Failed to initialize PostgreSQL. Exiting script.\n"
-    			exit 1
-		fi
-	fi
-fi
-
-echo -e "Looking for yay...\n"
+echo -e "looking for yay...\n"
 sleep 2
 # check for yay and install if not found
 if ! command -v yay &>/dev/null; then
@@ -168,7 +125,7 @@ if ! command -v yay &>/dev/null; then
     (cd yay && makepkg -si)
     # check for yay installation success
     if ! command -v yay &>/dev/null; then
-        echo -e "Error: yay installation failed. Exiting script.\n"
+        echo -e "ERROR: yay installation failed. Exiting script.\n"
         exit 1
     fi
 else
@@ -177,11 +134,11 @@ fi
 
 
 # install AUR packages with yay
-echo -e "Installing AUR packages with yay...\n"
+echo -e "installing AUR packages with yay...\n"
 if ! yay -S \
-    vscodium-bin ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
+    zwm-git ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
     noto-fonts-emoji amdgpu_top vscodium-bin ttf-arabeyes-fonts gputest; then
-    echo -e "Error: AUR package installation failed. Exiting script.\n"
+    echo -e "ERROR: AUR package installation failed. Exiting script.\n"
     exit 1
 fi
 
@@ -195,69 +152,71 @@ config_dirs=(
 	"$INSTALLERDIR/.config/sxhkd" 
 	"$INSTALLERDIR/.config/picom" 
 	"$INSTALLERDIR/.config/btop"
+	"$INSTALLERDIR/.config/emacs"
+	"$INSTALLERDIR/.config/zwm"
 )
 for dir in "${config_dirs[@]}"; do
     if ! cp -R "$dir" $HOME/.config/; then
-        echo -e "Error: Failed to copy $dir to ~/.config/. Exiting script.\n"
+        echo -e "ERROR: failed to copy $dir to ~/.config/. Exiting script.\n"
         exit 1
     fi
 done
 
-# Gruvbox Material GTK theme and icons
-echo "Installing Gruvbox Material GTK theme and icons..."
+# gruvbox material GTK theme and icons
+echo "installing Gruvbox Material GTK theme and icons..."
 # clone the Gruvbox Material GTK theme repository
 if ! git clone https://github.com/TheGreatMcPain/gruvbox-material-gtk.git $HOME/gruvbox-material-gtk; then
-    echo "Error: Failed to clone the repository. Exiting."
+    echo "ERROR: iailed to clone the repository. Exiting."
     exit 1
 fi
 
 # create ~/.icons and ~/.themes directories if they don't exist
-echo "Creating ~/.icons and ~/.themes directories..."
+echo "creating ~/.icons and ~/.themes directories..."
 if ! mkdir -p $HOME/.icons $HOME/.themes; then
-    echo "Error: Failed to create directories. Exiting."
+    echo "ERROR: failed to create directories. Exiting."
     exit 1
 fi
 
 # copy theme files to ~/.themes
 if ! cp -r $HOME/gruvbox-material-gtk/themes/* $HOME/.themes; then
-    echo "Error: Failed to copy theme files. Exiting."
+    echo "ERROR: failed to copy theme files. Exiting."
     exit 1
 fi
 
 # copy icon files to ~/.icons
 if ! cp -r $HOME/gruvbox-material-gtk/icons/* $HOME/.icons; then
-    echo "Error: Failed to copy icon files. Exiting."
+    echo "ERROR: failed to copy icon files. Exiting."
     exit 1
 fi
 echo "Gruvbox Material GTK theme and icons installed successfully!"
 
-# Install the shell (oh-my-zsh)
-echo -e "Installing oh-my-zsh...\n"
+# install this (oh-my-zsh)
+echo -e "installing oh-my-zsh...\n"
 if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; then
-    echo -e "Error: Oh-My-Zsh installation failed. Exiting script.\n"
+    echo -e "ERROR: Oh-My-Zsh installation failed. Exiting script.\n"
     exit 1
 fi
 
 # copy the specified dot files
 dot_files=("$INSTALLERDIR/.zshrc" "$INSTALLERDIR/.xinitrc" "$INSTALLERDIR/.tmux.conf")
-echo -e "Copying other dot files...\n"
+echo -e "copying other dot files...\n"
 for file in "${dot_files[@]}"; do
     if ! cp "$file" $HOME; then
-        echo -e "Error: Failed to copy $file. Exiting."
+        echo -e "ERROR: failed to copy $file. Exiting."
         exit 1
     fi
 	if ! chmod +x $HOME/.xinitrc; then
-        echo -e "Error: failed to make $HOME/.xinitrc executable.\n"
+        echo -e "ERROR: failed to make $HOME/.xinitrc executable.\n"
 	fi
 done
 
 
-# Script is done
-echo -e "Script is completed.\n"
-echo -e "You can start bspwm by typing startx\n"
-read -n1 -rep 'Start now? (y,n)' HYP
-if [[ $HYP == "Y" || $HYP == "y" ]]; then
-    exec startx
-else
-    exit
-fi
+# script is done
+echo -e "script is completed.\n"
+echo -e "you can start zwm by executing startx\n"
+# read -n1 -rep 'start now? (y,n)' HYP
+# if [[ $HYP == "Y" || $HYP == "y" ]]; then
+#     exec startx
+# else
+#     exit
+# fi

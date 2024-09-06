@@ -1,12 +1,10 @@
 ;;; :init.el starts here  -*- lexical-binding: t; -*-
 
-;;----------------------------------------------------
 ;; general configs
-;;----------------------------------------------------
 (electric-pair-mode 1)
 (global-display-line-numbers-mode 1)
 (global-visual-line-mode -1)
-(add-to-list 'default-frame-alist '(alpha-background . 95))
+(add-to-list 'default-frame-alist '(alpha-background . 97))
 (set-face-italic 'italic nil)
 (pixel-scroll-mode 1)
 (pixel-scroll-precision-mode t)
@@ -18,23 +16,30 @@
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
 
-;; vim tilde '~'
+
+;; emacs 28+ native compilation
+(setq package-native-compile t)
+(setq native-comp-async-report-warnings-errors nil)
+
+;; enable default windmove keybindings (shift + arrows)
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
+;; vim-like tilde '~' for empty lines
 (define-fringe-bitmap 'tilde [0 0 0 113 219 142 0 0] nil nil 'center)
 (setcdr (assq 'empty-line fringe-indicator-alist) 'tilde)
 (set-fringe-bitmap-face 'tilde 'font-lock-comment-face)
 
+;; display package load time on startup in **scratch** buffer
 (defun display-packages-load-time ()
   (with-current-buffer "*scratch*"
     (insert (format "\n;; %d packages loaded in %.6f seconds\n"
                     (length package-activated-list)
                     (float-time (time-subtract after-init-time before-init-time))))))
-
 (add-hook 'emacs-startup-hook 'display-packages-load-time)
 
 ;; font
 (set-face-attribute 'default nil :family "JetBrainsMono NF" :height 110 :weight 'regular)
-
-
 (set-face-attribute 'mode-line nil
                     :background "#212121"
 		            :family "JetBrainsMono NF"
@@ -43,6 +48,7 @@
                     :overline nil
                     :underline nil)
 
+;; some config
 (setq ring-bell-function 'ignore
 	  compile-command "make all"
 	  flymake-no-changes-timeout 10
@@ -60,16 +66,32 @@
       locale-coding-system 'utf-8
       c-tab-always-indent t)
 
-(setq default-text-properties '(line-spacing 0.20 line-height 1))
 
 (setq-default indent-tabs-mode t
-	          line-spacing 2
-              line-height 2
+	          ;; line-spacing 2
+              ;; line-height 2
 	          abbrev-mode -1
 	          indicate-empty-lines t
 	          tab-width 4
               c-basic-offset 4
 	          standard-indent 4)
+
+;; completion
+(ido-mode 1)
+(icomplete-mode 1)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(setq ido-use-filename-at-point 'guess)
+
+;; function to choose from recent files using IDO
+(defun ido-choose-from-recentf ()
+  "Use ido to select a recently visited file from the `recentf-list'"
+  (interactive)
+  (find-file (ido-completing-read "Open file: " recentf-list nil t)))
+
+;; spell-checking
+(require 'flyspell)
+(flyspell-mode +1)
 
 ;; search google
 (defun search-on-browser (term)
@@ -92,9 +114,7 @@
   (let ((full_query_url (concat search-engine-query-url "'" term "'")))
     (shell-command (concat browser-command " '" full_query_url "'") nil nil)))
 
-;;---------------------------------------------------
 ;; global keybindings
-;;---------------------------------------------------
 (global-set-key (kbd "C-g") 'search-on-browser)
 (global-set-key (kbd "TAB") 'self-insert-command)
 (global-set-key (kbd "C-=") 'text-scale-increase)
@@ -109,9 +129,7 @@
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-\"") 'mc/mark-all-like-this)
 
-;;----------------------------------------------------
 ;; package config
-;;----------------------------------------------------
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -120,28 +138,13 @@
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
-;; if if if
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
-
 (require 'use-package)
-
 (setq use-package-verbose t)
 (setq use-package-compute-statistics t)
 
-(use-package auto-package-update
-  :defer t
-  :custom
-  (auto-package-update-interval 7)
-  (auto-package-update-prompt-before-update t)
-  (auto-package-update-hide-results t)
-  :config
-  (auto-package-update-maybe)
-  (auto-package-update-at-time "09:00"))
-
-;;---------------------------------------------------
 ;; hide minor modes
-;;---------------------------------------------------
 (use-package diminish
   :ensure t
   :demand
@@ -152,9 +155,7 @@
   :diminish evil-collection-unimpaired-mode
   :diminish visual-line-mode)
 
-;;----------------------------------------------------
 ;; ui tweaks
-;;----------------------------------------------------
 (use-package doom-themes
   :ensure t
   :defer t
@@ -165,8 +166,8 @@
 (add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
 (setq custom-safe-themes t)
 (load-theme 'doom-zenburnv2)
-;;(setq doom-gruvbox-material-background  "medium")
-;;(load-theme 'doom-gruvbox-material)
+;; (setq doom-gruvbox-material-background  "medium")
+;; (load-theme 'doom-gruvbox-material)
 
 (use-package base16-theme
   :ensure t
@@ -176,18 +177,14 @@
   :ensure t
   :defer t)
 
-;;----------------------------------------------------
 ;; drag stuff - used to move lines and words around
-;;----------------------------------------------------
 (use-package drag-stuff
   :ensure t
   :init
   (drag-stuff-global-mode 1)
   (drag-stuff-define-keys))
 
-;;----------------------------------------------------
 ;; key table -> on SPC
-;;----------------------------------------------------
 (use-package which-key
   :ensure t
   :demand t
@@ -211,28 +208,27 @@
         which-key-prefix-prefix "+"))
 
 
-;;----------------------------------------------------
 ;; multiple cursors
-;;----------------------------------------------------
 (use-package multiple-cursors
   :ensure t)
 
-;;----------------------------------------------------
 ;; vim emulator
-;;----------------------------------------------------
 (use-package evil
   :ensure t
   :init
   (setq evil-want-integration t)
   (setq evil-want-keybinding nil)
   (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump nil)
+  (setq evil-want-C-i-jump t)
+  (setq evil-want-Y-yank-to-eol t)
+  (setq evil-symbol-word-search t)
   :demand
   :config
   (evil-mode 1))
 
 (use-package evil-surround
   :ensure t
+  :after evil
   :config
   (global-evil-surround-mode 1))
 
@@ -247,44 +243,13 @@
   (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
   (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file))
 
-;;----------------------------------------------------
-;; some completion packages
-;;----------------------------------------------------
-(use-package counsel
+;; git stuff
+(use-package magit
   :ensure t
-  :after ivy
-  :diminish counsel-mode
-  :config 
-  (counsel-mode)
-  (setq ivy-initial-inputs-alist nil))
+  :after eglot)
 
-(use-package ivy
-  :ensure t
-  :demand
-  :diminish ivy-mode
-  :bind
-  (("C-c C-r" . ivy-resume)
-   ("C-x B" . ivy-switch-buffer-other-window))
-  :custom
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq enable-recursive-minibuffers t)
-  :config
-  (ivy-mode))
-
-(use-package ivy-rich
-  :after ivy
-  :ensure t
-  :init (ivy-rich-mode 1))
-
-;;----------------------------------------------------
-;; magit
-;;----------------------------------------------------
-;; (use-package magit
-;;   :ensure t)
-;; (use-package git-gutter
-;;   :ensure t)
 (use-package git-gutter
+  :ensure t
   :diminish
   :init
   (setq git-gutter:modified-sign "~"
@@ -292,14 +257,55 @@
         git-gutter:deleted-sign "-"
 		git-gutter:update-interval 0.02)
   :config
-(global-git-gutter-mode 't))
+  (global-git-gutter-mode 't))
 
-(set-face-foreground 'git-gutter:modified "#b5c2b5") ;; background color
+(set-face-foreground 'git-gutter:modified "#b5c2b5")
 (set-face-foreground 'git-gutter:added "#a7bc99")
 (set-face-foreground 'git-gutter:deleted "#CC9393")
-;;----------------------------------------------------
-;; key mappings
-;;----------------------------------------------------
+
+;; fzf
+(use-package fzf
+  :ensure t
+  :defer t
+  :bind
+    ;; keys go here
+  :config
+  (setq fzf/args "-x --color bw --print-query --margin=1,0 --no-hscroll"
+        fzf/executable "fzf"
+        fzf/git-grep-args "-i --line-number %s"
+        ;; command used for `fzf-grep-*` functions
+        ;; example usage for ripgrep:
+        ;; fzf/grep-command "rg --no-heading -nH"
+        fzf/grep-command "grep -nrH"
+        ;; If nil, the fzf buffer will appear at the top of the window
+        fzf/position-bottom t
+        fzf/window-height 15))
+
+;; imenu-list
+(use-package imenu-list
+  :ensure t
+  :defer t
+  :hook (imenu-mode . imenu-list-mode)
+  :config
+  (setq imenu-list-position 'right
+		imenu-list-auto-resize t
+        imenu-list-idle-update-delay 1
+        imenu-list-focus-after-activation t))
+
+;; completeion helper
+(use-package company
+  :ensure t
+  :init (global-company-mode t)
+  :diminish company-mode
+  :defer t
+  :config
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.1
+        company-selection-wrap-around t
+        company-tooltip-align-annotations t
+        company-frontends '(company-pseudo-tooltip-frontend ; show tooltip even for single candidate
+                            company-echo-metadata-frontend))) ;; key mappings
+
 (use-package general
   :ensure t
   :demand t
@@ -312,19 +318,21 @@
     :global-prefix "M-SPC")
 
   (leader-keys
-    "SPC" '(counsel-M-x :wk "Counsel M-x")
-    "." '(find-file :wk "Find file")
+    "SPC" '(execute-extended-command :wk "M-x")
+    "." '(ido-find-file :wk "Find file")
 	"e" '(dired-jump :wk "Dired jump to current")
-    "c" '(project-compile :wk "Compile")
-    "\\" '(swiper-all :wk "Global grep")
+    "c" '(eshell-command :wk "Command")
+    "i" '(imenu-list-smart-toggle :wk "Definitions")
+    "\\" '(rgrep :wk "Global grep")
     "j" '(term :wk "Open terminal")
-    "t" '(project-shell :wk "Project shell")
-    "z" '(counsel-fzf :wk "Fuzzy finder")
+    "t" '(project-eshell :wk "Project shell")
+    "z" '(fzf-find-in-buffer :wk "Fuzzy finder")
 	"x" '(flymake-show-project-diagnostics :wk "Diagnostics")
-	"," '(counsel-switch-buffer :wk "Switch to buffer")
+	"," '(ido-switch-buffer :wk "Switch to buffer")
     "/" '(comment-line :wk "Comment lines")
-    ";" '(counsel-grep-or-swiper :wk "Grep")
-    "u" '(universal-argument :wk "Universal argument"))
+    ";" '(rgrep :wk "Grep")
+    "r" '(query-replace :wk "Search and replace")
+    "o" '(isearch-occur :wk "Isearch occur"))
 
   (leader-keys
     "b" '(:ignore t :wk "Buffers")
@@ -348,23 +356,21 @@
   (leader-keys
 	"d" '(:ignore t :wk "Dired")
 	"d e" '(dired :wk "Open dired")
-    "d d" '(counsel-dired :wk "Open dired")
 	"d f" '(wdired-finish-edit :wk "Writable dired finish edit")
-	"d j" '(counsel-dired-jump :wk "Dired jump to current"))
+	"d j" '(dired-jump :wk "Dired jump to current"))
   
   (leader-keys
 	"f" '(:ignore t :wk "Files")    
 	"f c" '((lambda () (interactive)
 			  (dired "~/.config/emacs/")) 
-			  :wk "Open private config")
+			:wk "Open private config")
 	"f t" '(find-grep-dired :wk "Search for string in files in DIR")
-	"f g" '(counsel-grep-or-swiper :wk "Search for string current file")
+	"f g" '(rgrep :wk "Search for string current file")
 	"f i" '((lambda () (interactive)
               (find-file "~/.config/emacs/init.el")) 
-			  :wk "Open emacs init.el")
-	"f j" '(counsel-file-jump :wk "Jump to a file below current directory")
-	"f l" '(counsel-locate :wk "Locate a file")
-	"f r" '(counsel-recentf :wk "Find recent files")
+			:wk "Open emacs init.el")
+	"f j" '(dired-jump :wk "Jump to a file below current directory")
+	"f r" '(ido-choose-from-recentf :wk "Find recent files")
 	"f p" '(project-switch-project :wk "Find project")
 	"f u" '(sudo-edit-find-file :wk "Sudo find file")
 	"f U" '(sudo-edit :wk "Sudo edit file"))
@@ -374,7 +380,7 @@
 	"h r" '(:ignore t :wk "Reload")
 	"h r r" '((lambda () (interactive)
 				(load-file "~/.config/emacs/init.el"))
-			    :wk "Reload emacs config")
+			  :wk "Reload emacs config")
 	"h t" '(load-theme :wk "Load theme"))
 
   (leader-keys
@@ -395,30 +401,30 @@
 	"w d" '(downcase-word :wk "Downcase word")
 	"w u" '(upcase-word :wk "Upcase word")
 	"w =" '(count-words :wk "Count words/lines for buffer"))
-	
-	(leader-keys
-		"g" '(:ignore t :wk "Git")    
-		"g /" '(magit-displatch :wk "Magit dispatch")
-		"g ." '(magit-file-displatch :wk "Magit file dispatch")
-		"g b" '(magit-branch-checkout :wk "Switch branch")
-		"g c" '(:ignore t :wk "Create") 
-		"g c b" '(magit-branch-and-checkout :wk "Create branch and checkout")
-		"g c c" '(magit-commit-create :wk "Create commit")
-		"g c f" '(magit-commit-fixup :wk "Create fixup commit")
-		"g C" '(magit-clone :wk "Clone repo")
-		"g f" '(:ignore t :wk "Find") 
-		"g f c" '(magit-show-commit :wk "Show commit")
-		"g f f" '(magit-find-file :wk "Magit find file")
-		"g f g" '(magit-find-git-config-file :wk "Find gitconfig file")
-		"g F" '(magit-fetch :wk "Git fetch")
-		"g g" '(magit-status :wk "Magit status")
-		"g i" '(magit-init :wk "Initialize git repo")
-		"g l" '(magit-log-buffer-file :wk "Magit buffer log")
-		"g r" '(vc-revert :wk "Git revert file")
-		"g s" '(magit-stage-file :wk "Git stage file")
-		"g t" '(git-timemachine :wk "Git time machine")
-		"g u" '(magit-stage-file :wk "Git unstage file"))
-	
+  
+  (leader-keys
+	"g" '(:ignore t :wk "Git")    
+	"g /" '(magit-displatch :wk "Magit dispatch")
+	"g ." '(magit-file-displatch :wk "Magit file dispatch")
+	"g b" '(magit-branch-checkout :wk "Switch branch")
+	"g c" '(:ignore t :wk "Create") 
+	"g c b" '(magit-branch-and-checkout :wk "Create branch and checkout")
+	"g c c" '(magit-commit-create :wk "Create commit")
+	"g c f" '(magit-commit-fixup :wk "Create fixup commit")
+	"g C" '(magit-clone :wk "Clone repo")
+	"g f" '(:ignore t :wk "Find") 
+	"g f c" '(magit-show-commit :wk "Show commit")
+	"g f f" '(magit-find-file :wk "Magit find file")
+	"g f g" '(magit-find-git-config-file :wk "Find gitconfig file")
+	"g F" '(magit-fetch :wk "Git fetch")
+	"g g" '(magit-status :wk "Magit status")
+	"g i" '(magit-init :wk "Initialize git repo")
+	"g l" '(magit-log-buffer-file :wk "Magit buffer log")
+	"g r" '(vc-revert :wk "Git revert file")
+	"g s" '(magit-stage-file :wk "Git stage file")
+	"g t" '(git-timemachine :wk "Git time machine")
+	"g u" '(magit-stage-file :wk "Git unstage file"))
+  
   (leader-keys
 	"l" '(:ignore t :wk "Eglot/LSP")
 	"l e" '(lsp :wk "Eglot/LSP")
@@ -432,9 +438,7 @@
 	"l f" '(eglot-format-buffer :wk "Format"))
   )
 
-;;----------------------------------------------------
 ;; startup dashboard
-;;----------------------------------------------------
 (use-package dashboard
   :ensure t 
   :init
@@ -452,9 +456,7 @@
   :config
   (dashboard-setup-startup-hook))
 
-;;----------------------------------------------------
 ;; syntax highlighting  
-;;----------------------------------------------------
 (use-package tree-sitter
   :ensure t
   :diminish tree-sitter-mode
@@ -475,9 +477,7 @@
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-;;----------------------------------------------------
 ;; Eglot 
-;;----------------------------------------------------
 (use-package eglot
   :ensure t
   :custom
@@ -492,36 +492,24 @@
 (use-package eldoc
   :ensure t
   :commands (eldoc-mode)
-  :diminish eldoc-mode)
+  :diminish eldoc-mode
+  :preface
+  (defun mp-eglot-eldoc ()
+    (setq eldoc-documentation-strategy
+            'eldoc-documentation-compose-eagerly))
+  :hook ((eglot-managed-mode . mp-eglot-eldoc)))
 
 (setq eldoc-echo-area-use-multiline-p nil)
-(setq eldoc-echo-area-display-truncation-message nil)
-(setq eldoc-echo-area-prefer-doc-buffer t)
+;; (setq eldoc-echo-area-display-truncation-message nil)
+;; (setq eldoc-echo-area-prefer-doc-buffer t)
 
-(use-package pdf-tools
+;; assemply view for c/c++
+(use-package disaster
   :ensure t
-  :config
-  (pdf-tools-install)
-  (setq-default pdf-view-display-size 'fit-page)
-  (setq pdf-annot-activate-created-annotations t)
-  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
-  (define-key pdf-view-mode-map (kbd "C-r") 'isearch-backward)
-  ;; (add-hook 'pdf-view-mode-hook (lambda ()
-  ;;                 (bms/pdf-midnite-amber))) ; automatically turns on midnight-mode for pdfs
-  )
-
-;; c/c++
-;; (use-package cc-mode
-;;   :ensure t
-;;   :defer t
-;;   :mode (("\\.c\\'" . c-mode)
-;;          ("\\.h\\'" . c-mode)
-;;          ("\\.cc\\'" . c++-mode)
-;;          ("\\.cpp\\'" . c++-mode)
-;;          ("\\.hh\\'" . c++-mode)
-;;          ("\\.hpp\\'" . c++-mode))
-;;   :hook (c-mode . lsp-deferred)
-;;   :hook (c++-mode . lsp-deferred))
+  :commands (disaster)
+  :init
+  ;; If you prefer viewing assembly code in `nasm-mode` instead of `asm-mode`
+  (setq disaster-assembly-mode 'nasm-mode))
 
 ;; holy c
 (use-package c-mode
@@ -552,19 +540,63 @@
   (add-to-list 'eglot-server-programs '((go-mode) . ("gopls")))
   :hook (go-mode . eglot-ensure))
 
-;; (use-package go-mode
-;;   :ensure t
-;;   :defer t
-;;   :mode ("\\.go\\'" . go-mode)
-;;   :hook
-;;   (go-mode . lsp-deferred))
-
 ;; markdown
 (use-package markdown-mode
   :defer t
   :ensure t
-  :mode ("README\\.md\\'" . gfm-mode)
-  :init (setq markdown-command "multimarkdown"))
+  :mode (("README\\.md\\'" . gfm-mode)
+        ("\\.md\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown")
+  :custom
+  (markdown-header-scaling t)
+  (markdown-hide-urls t)
+  (markdown-fontify-code-blocks-natively t)
+  (markdown-fontify-gfm-code-blocks t)
+  :config
+  (defun no-line-number ()
+    (display-line-numbers-mode 0))
+  (add-hook 'markdown-mode-hook 'no-line-number)
+  (add-hook 'gfm-mode-hook 'no-line-number)
+  (add-hook 'gfm-view-mode-hook 'no-line-number)
+  (add-hook 'markdown-view-mode-hook 'no-line-number)
+  (defun md-width ()
+       (set-fill-column 40))
+  (add-hook 'markdown-mode-hook 'md-width)
+  (add-hook 'gfm-mode-hook 'md-width)
+  (add-hook 'markdown-view-mode-hook 'md-width)
+  (add-hook 'gfm-view-mode-hook 'md-width))
+
+;; ebooks
+(use-package nov
+  :ensure t
+  :defer t
+  :mode ("\\.epub\\'" . nov-mode)
+  :custom (nov-text-width 90)
+  :config
+  (defun nov-font-setup ()
+    (face-remap-add-relative 'variable-pitch  :family "JetBrainsMono NF" :height 110 :weight 'regular))
+  (defun no-line-number ()
+    (display-line-numbers-mode 0))
+  (add-hook 'nov-mode-hook 'nov-font-setup)
+  (add-hook 'nov-mode-hook 'no-line-number))
+
+;; pdf tools
+(use-package pdf-tools
+  :ensure t
+  :defer t
+  :mode (("\\.pdf\\'" . pdf-view-mode))
+  :bind ((:map pdf-view-mode-map ("C--" . pdf-view-shrink))
+         (:map pdf-view-mode-map ("C-=" . pdf-view-enlarge))
+         (:map pdf-view-mode-map ("C-0" . pdf-view-scale-reset))
+		 (:map pdf-view-mode-map ("i"   . 'pdf-outline)))
+  :config
+  (defun no-line-number ()
+    (display-line-numbers-mode 0))
+  (add-hook 'pdf-view-mode-hook  'no-line-number)
+  (add-hook 'pdf-view-mode-hook 'pdf-view-fit-page-to-window)
+  (pdf-loader-install)
+  (setq pdf-info-epdfinfo-program "/usr/bin/epdfinfo"))
+(add-hook 'doc-view-mode (lambda () (display-line-numbers-mode -1)))
 
 ;;; init.el ends here
 (custom-set-faces
@@ -579,5 +611,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(git-gutter-fringe git-gutter evil-surround evil-mc evil-multiedit multiple-cursors company-box company which-key tree-sitter-langs projectile pdf-tools lsp-mode ivy-rich go-mode general evil-collection drag-stuff doom-themes diminish dashboard counsel base16-theme)))
+   '(org-bullets nov magit imenu-list fzf disaster git-gutter-fringe git-gutter evil-surround evil-mc evil-multiedit multiple-cursors company-box company which-key tree-sitter-langs projectile pdf-tools lsp-mode ivy-rich go-mode general evil-collection drag-stuff doom-themes diminish dashboard counsel base16-theme))
+ '(warning-suppress-log-types '((pdf-view))))
 (put 'dired-find-alternate-file 'disabled nil)
