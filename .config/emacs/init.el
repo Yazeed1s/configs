@@ -1,12 +1,13 @@
 ;;; :init.el starts here  -*- lexical-binding: t; -*-
 
 ;; general configs
-(electric-pair-mode 1)
-(global-display-line-numbers-mode 1)
-(global-visual-line-mode -1)
+(electric-pair-mode -1)
+(global-display-line-numbers-mode -1)
+(global-visual-line-mode 1)
 (add-to-list 'default-frame-alist '(alpha-background . 97))
 (set-face-italic 'italic nil)
 (pixel-scroll-mode 1)
+(column-number-mode 1)
 (pixel-scroll-precision-mode t)
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-terminal-coding-system 'utf-8)
@@ -15,7 +16,7 @@
 (set-default-coding-systems 'utf-8)
 (set-language-environment 'utf-8)
 (prefer-coding-system 'utf-8)
-
+(flymake-mode -1)
 
 ;; emacs 28+ native compilation
 (setq package-native-compile t)
@@ -51,9 +52,6 @@
 ;; some config
 (setq ring-bell-function 'ignore
 	  compile-command "make all"
-	  flymake-no-changes-timeout 10
-      flymake-start-syntax-check-on-newline nil
-      org-edit-src-content-indentation 0
       use-file-dialog nil  
       use-dialog-box nil  
       pop-up-windows nil 
@@ -121,13 +119,10 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 (global-set-key [escape] 'keyboard-escape-quit)
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-(global-set-key (kbd "M-/") 'completion-at-point)
+;; (global-set-key (kbd "M-/") 'company-complete)
 (global-set-key (kbd "<C-right>") 'next-buffer)
 (global-set-key (kbd "<C-left>") 'previous-buffer)
-(global-set-key (kbd "C-.") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-\"") 'mc/mark-all-like-this)
+(global-set-key (kbd "M-/") 'completion-at-point)
 
 ;; package config
 (require 'package)
@@ -208,10 +203,6 @@
         which-key-prefix-prefix "+"))
 
 
-;; multiple cursors
-(use-package multiple-cursors
-  :ensure t)
-
 ;; vim emulator
 (use-package evil
   :ensure t
@@ -226,6 +217,23 @@
   :config
   (evil-mode 1))
 
+;; multiple cursors
+(use-package evil-multiedit
+  :ensure t
+  :after evil
+  :config
+  (setq evil-multiedit-scope 'buffer
+		evil-multiedit-follow-matches t)
+  :bind (:map evil-normal-state-map
+             ("C->" . evil-multiedit-match-and-next)
+             ("C-<" . evil-multiedit-match-and-prev)
+             ("C-." . evil-multiedit-match-all)
+           :map evil-visual-state-map
+             ("M->" . evil-multiedit-match-and-next)
+             ("M-<" . evil-multiedit-match-and-prev)
+             ("M-." . evil-multiedit-match-all)))
+
+		  
 (use-package evil-surround
   :ensure t
   :after evil
@@ -293,18 +301,20 @@
         imenu-list-focus-after-activation t))
 
 ;; completeion helper
-(use-package company
-  :ensure t
-  :init (global-company-mode t)
-  :diminish company-mode
-  :defer t
-  :config
-  (setq company-minimum-prefix-length 1
-        company-idle-delay 0.1
-        company-selection-wrap-around t
-        company-tooltip-align-annotations t
-        company-frontends '(company-pseudo-tooltip-frontend ; show tooltip even for single candidate
-                            company-echo-metadata-frontend))) ;; key mappings
+;; (use-package company
+;;   :ensure t
+;;   :init (global-company-mode t)
+;;   :diminish company-mode
+;;   :defer t
+;;   :config
+;;   (setq company-minimum-prefix-length 1
+;;         company-idle-delay 0.1
+;;         company-selection-wrap-around t
+;;         company-tooltip-align-annotations t
+;;         company-frontends '(company-pseudo-tooltip-frontend ; show tooltip even for single candidate
+;;                             company-echo-metadata-frontend))) ;; key mappings
+;; (with-eval-after-load 'company
+;;   (define-key company-active-map (kbd "M-/") #'company-complete))
 
 (use-package general
   :ensure t
@@ -336,7 +346,7 @@
 
   (leader-keys
     "b" '(:ignore t :wk "Buffers")
-    "b b" '(switch-to-buffer :wk "Switch to buffer")
+    "b b" '(ido-switch-buffer :wk "Switch to buffer")
     "b c" '(clone-indirect-buffer :wk "Create indirect buffer copy in a split")
     "b C" '(clone-indirect-buffer-other-window :wk "Clone indirect buffer in new window")
     "b d" '(bookmark-delete :wk "Delete bookmark")
@@ -372,12 +382,14 @@
 	"f j" '(dired-jump :wk "Jump to a file below current directory")
 	"f r" '(ido-choose-from-recentf :wk "Find recent files")
 	"f p" '(project-switch-project :wk "Find project")
+	"f f" '(find-file-at-point :wk "Find file at point")
 	"f u" '(sudo-edit-find-file :wk "Sudo find file")
 	"f U" '(sudo-edit :wk "Sudo edit file"))
   
   (leader-keys
 	"h" '(:ignore t :wk "Help")
 	"h r" '(:ignore t :wk "Reload")
+	"h l" '(display-line-numbers-mode :wk "display line numbers")
 	"h r r" '((lambda () (interactive)
 				(load-file "~/.config/emacs/init.el"))
 			  :wk "Reload emacs config")
@@ -393,7 +405,7 @@
   
   (leader-keys
 	"w" '(:ignore t :wk "Windows/Words")
-	"w c" '(delete-window :wk "Close window")
+	"w k" '(delete-window :wk "Close window")
 	"w n" '(new-window-on-right :wk "New window")
 	"w s" '(split-window-vertically :wk "Horizontal split window")
 	"w v" '(split-window-horizontally :wk "Vertical split window")
@@ -428,6 +440,7 @@
   (leader-keys
 	"l" '(:ignore t :wk "Eglot/LSP")
 	"l e" '(lsp :wk "Eglot/LSP")
+	"l l" '(imenu-list :wk "Functions definitions")
 	"l r" '(eglot-reconnect :wk "Eglot reconnect")
 	"l a" '(eglot-code-actions :wk "Code actions")
 	"l x" '(eglot-shutdown :wk "Eglot shutdown lang server")
@@ -477,6 +490,17 @@
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
+;; (use-package flymake
+;;   :ensure t
+;;   :defer t
+;;   :custom
+;;   (flymake-mode-line-lighter "fly"))
+
+;; ;;(add-hook 'find-file-hook (lambda () (flymake-mode -1)))
+;; (setq flymake-start-on-flymake-mode nil)
+
+;; (setq flymake-start-on-save-buffer nil)
+
 ;; Eglot 
 (use-package eglot
   :ensure t
@@ -487,7 +511,8 @@
 (setq eglot-ignored-server-capabilities '(:hoverProvider))
 (setq eglot-ignored-server-capabilities '(:documentHighlightProvider))
 (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1)))
-
+(add-hook 'eglot-managed-mode-hook (lambda ()
+                   (remove-hook 'flymake-diagnostic-functions 'eglot-flymake-backend)))
 ;; docs viewer
 (use-package eldoc
   :ensure t
@@ -540,6 +565,19 @@
   (add-to-list 'eglot-server-programs '((go-mode) . ("gopls")))
   :hook (go-mode . eglot-ensure))
 
+;; haskell
+(use-package haskell-mode
+  :ensure t
+  :defer t
+  :mode ("\\.hs\\'" . haskell-mode)
+   :config
+  (add-hook 'haskell-mode-hook 'eglot-ensure)
+  (setq eglot-connect-timeout 300)  ;; Big projects might take a while!
+  :custom
+  (eglot-autoshutdown t)  ;; shutdown language server after closing last file
+  (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
+  )
+
 ;; markdown
 (use-package markdown-mode
   :defer t
@@ -553,12 +591,6 @@
   (markdown-fontify-code-blocks-natively t)
   (markdown-fontify-gfm-code-blocks t)
   :config
-  (defun no-line-number ()
-    (display-line-numbers-mode 0))
-  (add-hook 'markdown-mode-hook 'no-line-number)
-  (add-hook 'gfm-mode-hook 'no-line-number)
-  (add-hook 'gfm-view-mode-hook 'no-line-number)
-  (add-hook 'markdown-view-mode-hook 'no-line-number)
   (defun md-width ()
        (set-fill-column 40))
   (add-hook 'markdown-mode-hook 'md-width)
@@ -575,10 +607,7 @@
   :config
   (defun nov-font-setup ()
     (face-remap-add-relative 'variable-pitch  :family "JetBrainsMono NF" :height 110 :weight 'regular))
-  (defun no-line-number ()
-    (display-line-numbers-mode 0))
-  (add-hook 'nov-mode-hook 'nov-font-setup)
-  (add-hook 'nov-mode-hook 'no-line-number))
+   (add-hook 'nov-mode-hook 'nov-font-setup))
 
 ;; pdf tools
 (use-package pdf-tools
@@ -589,14 +618,53 @@
          (:map pdf-view-mode-map ("C-=" . pdf-view-enlarge))
          (:map pdf-view-mode-map ("C-0" . pdf-view-scale-reset))
 		 (:map pdf-view-mode-map ("i"   . 'pdf-outline)))
+  :init (pdf-loader-install)
   :config
-  (defun no-line-number ()
-    (display-line-numbers-mode 0))
-  (add-hook 'pdf-view-mode-hook  'no-line-number)
-  (add-hook 'pdf-view-mode-hook 'pdf-view-fit-page-to-window)
-  (pdf-loader-install)
   (setq pdf-info-epdfinfo-program "/usr/bin/epdfinfo"))
-(add-hook 'doc-view-mode (lambda () (display-line-numbers-mode -1)))
+
+;; (add-hook 'pdf-view-mode-hook #'(lambda () (interactive) (display-line-numbers-mode -1)
+;;      (blink-cursor-mode -1))
+
+;; disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                pdf-view-mode-hook 
+                term-mode-hook
+                eshell-mode-hook
+                dashboard-mode-hook
+				nov-mode-hook
+  				markdown-mode-hook
+ 				gfm-mode-hook
+ 				markdown-view-mode-hook
+ 				gfm-view-mode-hook))
+		    (add-hook mode (lambda () (display-line-numbers-mode -1))))
+
+(use-package org
+  :ensure t
+  :defer t
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c c" . org-capture)
+         :map org-mode-map
+         ("M-;" . org-comment-dwim))
+  :config
+  (setq org-adapt-indentation t
+        org-hide-leading-stars t
+        org-src-fontify-natively t
+        org-edit-src-content-indentation 0
+        org-ellipsis "-"              ; Nicer ellipsis
+        org-tags-column 1              ; Tags next to header title
+        org-hide-emphasis-markers t    ; Hide markers
+        org-cycle-separator-lines 2    ; Number of empty lines between sections
+        org-use-tag-inheritance nil    ; Tags ARE NOT inherited
+        org-use-property-inheritance t ; Properties ARE inherited
+        org-indent-indentation-per-level 2 ; Indentation per level
+        org-link-use-indirect-buffer-for-internals t ; Indirect buffer for internal links
+        org-fontify-quote-and-verse-blocks t ; Specific face for quote and verse blocks
+        org-return-follows-link nil    ; Follow links when hitting return
+        org-image-actual-width nil     ; Resize image to window width
+        org-indirect-buffer-display 'other-window ; Tab on a task expand it in a new window
+        org-outline-path-complete-in-steps nil) ; No steps in path display
+  (add-hook 'org-mode-hook (lambda () (org-indent-mode t))))
 
 ;;; init.el ends here
 (custom-set-faces
