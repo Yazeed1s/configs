@@ -1,11 +1,10 @@
-live_config_reload = true
-ipc_socket = true 
 
-[shell]
+[terminal.shell]
 program = "/bin/zsh"
 
 [env]
 TERM = 'xterm-256color'
+WINIT_X11_SCALE_FACTOR = "1.45"
 
 [window]
 padding = {x = 6,y = 6}
@@ -20,38 +19,14 @@ multiplier = 4
 
 [font]
 normal = {family = "JetbrainsMono NF", style = "Regular"}
-size = 10
-offset = {x = 1, y = 6}
+size = 6.5
+offset = {x = 1, y = 1}
 glyph_offset = {x = 1, y = 1}
 builtin_box_drawing = true
 
 [colors]
 draw_bold_text_with_bright_colors = true
 transparent_background_colors = false
-
-[colors.primary]
-background = '#161616'
-foreground = '#dac7a6'
-
-[colors.normal]
-black = '#928374'
-red = '#ea6962'
-green = '#a9b665'
-yellow = '#d8a657'
-blue = '#83a598'
-magenta = '#d3869b'
-cyan = '#83a598'
-white = '#d4be98'
-
-[colors.bright]
-black = '#928374'
-red = '#ea6962'
-green = '#a9b665'
-yellow = '#d8a657'
-blue = '#83a598'
-magenta = '#d3869b'
-cyan = '#83a598'
-white = '#d4be98'
 
 [cursor]
 style = {shape = "Underline", blinking = "Never"}
@@ -61,3 +36,10 @@ osc52 = "CopyPaste"
 
 [mouse]
 hide_when_typing = true
+
+[general]
+live_config_reload = true
+ipc_socket = true 
+import = [
+    "~/.config/alacritty/themes/gruvbox_material_hard_dark.toml"
+]

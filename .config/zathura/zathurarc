@@ -1,0 +1,54 @@
+set selection-clipboard clipboard
+set incremental-search true
+set statusbar-home-tilde true
+set window-title-basename true
+set smooth-scroll true
+set scroll-step 40
+set scroll-page-aware true
+set scroll-full-overlap 0.02
+
+set adjust-open width
+set zoom-min 10
+set zoom-max 400
+set zoom-step 10
+
+set page-padding 8
+
+set recolor true
+set recolor-lightcolor "#f4f1ea"
+set recolor-darkcolor "#3d3021"
+set recolor-keephue true
+
+set highlight-color "#fff4b3"
+
+set highlight-active-color "#ffd966"
+
+set search-bg "#a8d5e2"
+set search-fg "#1a3a47"
+
+set statusbar-bg "#e8e3d8"
+set statusbar-fg "#5d4e37"
+
+set index-bg "#f4f1ea"
+set index-fg "#3d3021"
+set index-active-bg "#d4c8b0"
+set index-active-fg "#2a1f14"
+
+set link-color "#4a7c8e"
+set link-highlight true
+
+map <C-r> recolor
+
+map J scroll down
+map K scroll up
+
+map H navigate previous
+map L navigate next
+
+map + zoom in
+map - zoom out
+
+map n search next
+map N search previous
+
+set render-loading false
